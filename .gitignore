@@ -1,0 +1,10 @@
+.settings
+/bin
+.classpath
+.project
+*.log
+
+#-- For IntelliJ project
+.idea/
+*.iml
+out/
