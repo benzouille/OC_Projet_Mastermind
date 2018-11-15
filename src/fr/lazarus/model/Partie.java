@@ -46,9 +46,9 @@ public class Partie {
 		tour = 0;
 	}
 
-	public void ordiPartie(int nbreChiffre) {
-		setSolution(random(nbreChiffre));
-	}
+	public void ordiPartie(int nbreChiffre) { setSolution(random(nbreChiffre)); }
+
+    public void ordiPartie(int nbreChiffre, int nbreCouleur) { setSolution(random(nbreChiffre, nbreCouleur)); }
 
 	/**
 	 * Génère une combinaison aléatoire d'une longueur égale à combiPlusMoins de l'objet configuration

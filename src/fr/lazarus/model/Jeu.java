@@ -1,5 +1,7 @@
 package fr.lazarus.model;
 
+import fr.lazarus.model.mastermind.JoueurMastermind;
+import fr.lazarus.model.mastermind.MasterMastermind;
 import fr.lazarus.model.plusMoins.JoueurPlus;
 import fr.lazarus.model.plusMoins.MasterPlus;
 import fr.lazarus.observer.Observateur;
@@ -10,8 +12,10 @@ public class Jeu {
 	private ModeDeJeu modeDeJeu;
 	private Configuration config;
 	private Observateur obs;
-	private MasterPlus master;
-	private JoueurPlus joueur;
+	private MasterPlus masterPlus;
+	private MasterMastermind masterMastermind;
+	private JoueurPlus joueurPlus;
+	private JoueurMastermind joueurMastermind;
 	private boolean actifChal = true, actifDef = false;
 
 	public Jeu(ModeDeJeu modeDeJeu, Configuration config, Observateur obs) {
@@ -28,43 +32,44 @@ public class Jeu {
 		//TODO en fonction du ModeDeJeu lancer le master le joueur avec ordinateur/humain
 		if(modeDeJeu.equals(ModeDeJeu.PLUS_CHAL)) {
 			partie1 = new Partie("partie1", ModeDePartie.PLUS_CHAL);
-			master = new MasterPlus(config, partie1, obs);
+            masterPlus = new MasterPlus(config, partie1, obs);
 		}
 		else if(modeDeJeu.equals(ModeDeJeu.MAST_CHAL)) {
 			partie1 = new Partie("partie1", ModeDePartie.MAST_CHAL);
-			//master = new MasterPlus(config, partie1, obs);
+            masterMastermind = new MasterMastermind(config, partie1, obs);
 		}
 		else if(modeDeJeu.equals(ModeDeJeu.PLUS_DEF)) {
 			partie1 = new Partie("partie1", ModeDePartie.PLUS_DEF);
-			joueur = new JoueurPlus(config, partie1, obs);
+            joueurPlus = new JoueurPlus(config, partie1, obs);
 			if(config.isDevModEnJeu()) {
-				master = new MasterPlus(config, partie1, obs);	
+                masterPlus = new MasterPlus(config, partie1, obs);
 			}
-			joueur.initOrdinateur(partie1);
+            joueurPlus.initOrdinateur(partie1);
 		}
 		else if(modeDeJeu.equals(ModeDeJeu.MAST_DEF)) {
+			//TODO à modifier
 			partie1 = new Partie("partie1", ModeDePartie.MAST_DEF);
-			joueur = new JoueurPlus(config, partie1, obs);
+			joueurMastermind = new JoueurMastermind(config, partie1, obs);
 			//joueur.initOrdinateur(partie1);
 		}
 		else if(modeDeJeu.equals(ModeDeJeu.PLUS_DUEL)) {
 			partie1 = new Partie("partie1", ModeDePartie.PLUS_CHAL);
-			master = new MasterPlus(config, partie1, obs);
+            masterPlus = new MasterPlus(config, partie1, obs);
 			partie2 = new Partie("partie2", ModeDePartie.PLUS_DEF);
-			joueur = new JoueurPlus(config, partie2, obs);
-			joueur.initOrdinateur(partie2);
+            joueurPlus = new JoueurPlus(config, partie2, obs);
+            joueurPlus.initOrdinateur(partie2);
 		}
 		else {
 			partie1 = new Partie("partie1", ModeDePartie.MAST_CHAL);
-			master = new MasterPlus(config, partie1, obs);
+            masterMastermind = new MasterMastermind(config, partie1, obs);
 			partie2 = new Partie("partie2", ModeDePartie.MAST_DEF);
-			joueur = new JoueurPlus(config, partie2, obs);
-			joueur.initOrdinateur(partie2);
+            joueurMastermind = new JoueurMastermind(config, partie2, obs);
+            joueurMastermind.initOrdinateur(partie2);
 		}
 	}
 
 	public void initOrdi(Partie partie) {
-		joueur.initOrdinateur(partie);
+        joueurPlus.initOrdinateur(partie);
 	}
 
 	/**
@@ -73,7 +78,7 @@ public class Jeu {
 	 */
 	public void indiceOrdi (Partie partie) {
 		System.out.println("indiceOrdi() de Jeu");
-		master.resolve(partie);
+		masterPlus.resolve(partie);
 	}
 
 	/**
@@ -83,7 +88,7 @@ public class Jeu {
 	 */
 	public void propOrdi(Partie partie) {
 		System.out.println("propOrdi() de Jeu");
-		joueur.propositionOrdinateur(partie);
+		joueurPlus.propositionOrdinateur(partie);
 	}
 
 	/**

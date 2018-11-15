@@ -35,6 +35,7 @@ public class MasterPlus implements ModelMaster, Observable {
 		this.config = config;
 		this.partie = partie;
 		this.addObservateur(obs);
+
 		if (partie.getModeDePartie().equals(ModeDePartie.PLUS_CHAL)) {
 			this.partie.ordiPartie(config.getCombiPlusMoins());
 		}
@@ -82,7 +83,7 @@ public class MasterPlus implements ModelMaster, Observable {
 	 * @return partie
 	 */
 	public Partie endGame() {
-		System.out.println("endGame() de Master");
+		System.out.println("endGame() de MasterPlus");
 		int prop = Integer.parseInt(proposition);
 		int sol = Integer.parseInt(solution);
 		if (sol == prop) {
@@ -108,7 +109,7 @@ public class MasterPlus implements ModelMaster, Observable {
 
 	public void updateObservateur() {
 		for(Observateur obs : listObservateur) {
-			System.out.println("updateObservateur() de Master");
+			System.out.println("updateObservateur() de MasterPlus");
 		System.out.println(partie.toString());
 		obs.update(partie);
 		}

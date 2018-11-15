@@ -101,7 +101,7 @@ public class GamePanelPlusMoins extends JPanel {
 	/**
 	 * Panel sud avec les entrées pour les propositions en mode challanger et les indices en mode defenseur
 	 */
-	public void initPanelSouth() {
+	private void initPanelSouth() {
 
 		jpSouth = new JPanel();
 		jpSouth.setPreferredSize(new Dimension(750,150));
@@ -286,7 +286,7 @@ public class GamePanelPlusMoins extends JPanel {
 	public boolean isOkIndice(String indice) {
 		dataIsOk = true;
 		if (indice.length() != config.getCombiPlusMoins()) {
-			JOptionPane.showMessageDialog(null, "Erreur ! \n Veuillez entrer une solution à "+ config.getCombiPlusMoins() +".", "ERREUR", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Erreur ! \n Veuillez entrer un indice à "+ config.getCombiPlusMoins() +".", "ERREUR", JOptionPane.ERROR_MESSAGE);
 			dataIsOk = false;
 			jtfProposition.setText("");
 		}
@@ -305,7 +305,7 @@ public class GamePanelPlusMoins extends JPanel {
 		dataIsOk = true;
 
 		if (proposition.length() != config.getCombiPlusMoins()) {
-			JOptionPane.showMessageDialog(null, "Erreur ! \n Veuillez entrer une solution à "+ config.getCombiPlusMoins() +".", "ERREUR", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Erreur ! \n Veuillez entrer une proposition à "+ config.getCombiPlusMoins() +".", "ERREUR", JOptionPane.ERROR_MESSAGE);
 			dataIsOk = false;
 			jtfProposition.setText("");
 		}
