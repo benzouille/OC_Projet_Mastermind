@@ -6,13 +6,13 @@ import java.awt.Dimension;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import avant_implementation.GamePanelMastermind;
 import fr.lazarus.controller.Controller;
 import fr.lazarus.model.Configuration;
 import fr.lazarus.model.Jeu;
 import fr.lazarus.model.ModeDeJeu;
 import fr.lazarus.model.ModeDePartie;
 import fr.lazarus.observer.Observateur;
+import fr.lazarus.view.game.mastermind.GamePanelMastermind;
 import fr.lazarus.view.game.plusMoins.GamePanelPlusMoins;
 import fr.lazarus.view.game.plusMoins.PopUpCombi;
 
@@ -49,12 +49,10 @@ public class PanelJeu extends JPanel {
 			controller = new Controller(configuration,jeu.getPartie1(), jeu);
 			PopUpCombi popUpCombi = new PopUpCombi(null, "choix de la combinaison", true, configuration, jeu.getPartie1(), obs);
 			jpDefPlus = new GamePanelPlusMoins(configuration, jeu.getModeDeJeu(), jeu.getPartie1(), controller);
-			if(configuration.isDevModEnJeu() == true && jeu.getPartie1().getModeDePartie() == ModeDePartie.PLUS_DEF) {
+			if(configuration.isDevModEnJeu() && jeu.getPartie1().getModeDePartie() == ModeDePartie.PLUS_DEF) {
 				controller.sendProposition(jeu.getPartie1());
 				jpDefPlus.devIndice();
-				System.out.println("dans le if");
 			}
-			else {System.out.println("dans le else");}
 			ajouterPanneauxDeBourrageDeChaqueCote();
 			this.add(jpDefPlus, BorderLayout.CENTER);
 		}
@@ -69,7 +67,7 @@ public class PanelJeu extends JPanel {
 			PopUpCombi popUpCombi = new PopUpCombi(null, "choix de la combinaison", true, configuration, jeu.getPartie2(), obs);
 			jeu.getPartie2().setActif(false);
 			jpDefPlus = new GamePanelPlusMoins(configuration, jeu.getModeDeJeu(), jeu.getPartie2(), controller);
-			if(configuration.isDevModEnJeu() == true && jeu.getPartie2().getModeDePartie() == ModeDePartie.PLUS_DEF) {
+			if(configuration.isDevModEnJeu() && jeu.getPartie2().getModeDePartie() == ModeDePartie.PLUS_DEF) {
 				controller.sendProposition(jeu.getPartie2());
 				jpDefPlus.devIndice();
 				System.out.println("dans le if");
@@ -85,16 +83,16 @@ public class PanelJeu extends JPanel {
 		else if(jeu.getModeDeJeu().equals(ModeDeJeu.MAST_CHAL)){
 			this.setPreferredSize(smallSize);
 			controller = new Controller(configuration,jeu.getPartie1(), jeu);
-			//jpChalMast = new GamePanelMastermind(configuration, jeu.getModeDeJeu(), jeu.getPartie1(), controller);
+			jpChalMast = new GamePanelMastermind(configuration, jeu.getModeDeJeu(), jeu.getPartie1(), controller);
 			ajouterPanneauxDeBourrageDeChaqueCote();
-			this.add(jpChalMast, BorderLayout.WEST);
+			this.add(jpChalMast, BorderLayout.CENTER);
 		}
 		else if(jeu.getModeDeJeu().equals(ModeDeJeu.MAST_DEF)) {
 			this.setPreferredSize(smallSize);
 			controller = new Controller(configuration,jeu.getPartie1(), jeu);
 			PopUpCombi popUpCombi = new PopUpCombi(null, "choix de la combinaison", true, configuration, jeu.getPartie1(), obs);
 			//jpDefMast = new GamePanelMastermind(configuration, jeu.getModeDeJeu(), jeu.getPartie1(), controller);
-			if(configuration.isDevModEnJeu() == true && jeu.getPartie1().getModeDePartie() == ModeDePartie.PLUS_DEF) {
+			if(configuration.isDevModEnJeu() && jeu.getPartie1().getModeDePartie() == ModeDePartie.PLUS_DEF) {
 				controller.sendProposition(jeu.getPartie1());
 				jpDefMast.devIndice();
 				System.out.println("dans le if");

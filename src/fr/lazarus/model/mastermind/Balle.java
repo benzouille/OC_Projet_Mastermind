@@ -5,13 +5,14 @@ import javax.swing.ImageIcon;
 public class Balle {
 	
 	private TypeCouleur typeCouleur;
-	private ImageIcon imageIcon, imageIconSmall, imageIconMoy;
+	private ImageIcon imageIcon, imageIconSmall, imageIconMoy, imageIconNano;
 	
 	public Balle(TypeCouleur typeCouleur) {
 		this.typeCouleur = typeCouleur;
 		imageIcon = new ImageIcon("resources/images/mastermind/" + typeCouleur.getCouleur() + ".png");
 		imageIconSmall = new ImageIcon("resources/images/mastermind/" + typeCouleur.getCouleur() + "Min.png");
 		imageIconMoy = new ImageIcon("resources/images/mastermind/" + typeCouleur.getCouleur() + "Moy.png");
+        imageIconNano = new ImageIcon("resources/images/mastermind/" + typeCouleur.getCouleur() + "Nano.png");
 	}
 	
 	public String toString() {
@@ -26,4 +27,6 @@ public class Balle {
 	public ImageIcon getImageIconSmall() {return imageIconSmall;}
 
 	public ImageIcon getImageIconMoy() { return imageIconMoy; }
+
+    public ImageIcon getImageIconNano() { return imageIconNano; }
 }

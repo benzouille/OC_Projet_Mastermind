@@ -41,6 +41,11 @@ public class CenterGamePanelMastermind extends JPanel {
 
     private Balle balles[] = {bleu, brun, cyan, jaune, orange, rose, rouge, vert, vertClair, violet};
 
+    private Balle noir = new Balle(TypeCouleur.NOIR),
+            blanc = new Balle(TypeCouleur.BLANC);
+
+    private Balle ballesIndice[] = {noir, blanc};
+
     private LigneTableauMast ligneTableau = null;
     private List<LigneTableauMast> listLigneTableau = new ArrayList<>();
 
@@ -80,12 +85,14 @@ public class CenterGamePanelMastermind extends JPanel {
             }
             jpProp.setVisible(true);
             jpProp.setBackground(Color.WHITE);
+            jpProp.setPreferredSize(new Dimension(350, 35));
             jpProp.setFont(font);
             jpCenter.add(jpProp);
 
             //- Les indications du Maitre du jeux
             JPanel jpIndic = new JPanel();
             jpIndic.setVisible(true);
+            jpProp.setPreferredSize(new Dimension(150, 35));
             jpIndic.setFont(font);
             jpIndic.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
             jpCenter.add(jpIndic);
@@ -102,7 +109,6 @@ public class CenterGamePanelMastermind extends JPanel {
         listLigneTableau.get(0).getJpProps().add(jlProps);
         listLigneTableau.get(0).getJpIndic().add(jlIndic);
         if (partie.getModeDePartie() == ModeDePartie.PLUS_DEF) {
-            //listLigneTableau.get(1).getJpProps().setText(partie.getProposition());;
             stringToImage(partie.getProposition(), listLigneTableau.get(1).getJpProps());
         }
 
@@ -116,6 +122,20 @@ public class CenterGamePanelMastermind extends JPanel {
         for(int i = 0; i<str.length(); i++){
             JLabel jLabel = new JLabel(balles[Character.getNumericValue(str.charAt(i))].getImageIconMoy());
             jPanel.add(jLabel);
+        }
+        jPanel.revalidate();
+    }
+
+    public void stringToImage(String str, JPanel jPanel,Balle[] balles){
+        for(int i = 0; i<str.length(); i++){
+            if (balles == ballesIndice){
+                JLabel jLabel = new JLabel(balles[Character.getNumericValue(str.charAt(i))].getImageIconNano());
+                jPanel.add(jLabel);
+            }
+            else {
+                JLabel jLabel = new JLabel(balles[Character.getNumericValue(str.charAt(i))].getImageIconMoy());
+                jPanel.add(jLabel);
+            }
         }
         jPanel.revalidate();
     }
@@ -137,15 +157,14 @@ public class CenterGamePanelMastermind extends JPanel {
 
     public void addDataLine(Partie partie) {
         if (partie.getModeDePartie() == ModeDePartie.MAST_CHAL) {
-            //listLigneTableau.get(partie.getTour()).getJpProps().setText(partie.getProposition());
             stringToImage(partie.getProposition(), listLigneTableau.get(partie.getTour()).getJpProps());
         }
         else if (partie.getModeDePartie() == ModeDePartie.MAST_DEF) {
-            //listLigneTableau.get(partie.getTour()+1).getJpProps().setText(partie.getProposition());
             stringToImage(partie.getProposition(), listLigneTableau.get(partie.getTour()+1).getJpProps());
         }
-        //listLigneTableau.get(partie.getTour()).getJpIndic().setText(partie.getIndice());
-        //stringToImage(partie.getIndice(), listLigneTableau.get(partie.getTour()).getJpIndic());
+        if(!partie.getIndice().equals("vide")){
+            stringToImage(partie.getIndice(), listLigneTableau.get(partie.getTour()).getJpIndic(), ballesIndice);
+        }
         setVisibleLine(partie.getTour());
         this.repaint();
     }

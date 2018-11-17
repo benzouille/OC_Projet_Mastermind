@@ -69,7 +69,12 @@ public class Jeu {
 	}
 
 	public void initOrdi(Partie partie) {
-        joueurPlus.initOrdinateur(partie);
+        if(partie.getModeDePartie().equals(ModeDePartie.PLUS_CHAL)) {
+            joueurPlus.initOrdinateur(partie);
+        }
+        else{
+            joueurMastermind.initOrdinateur(partie);
+        }
 	}
 
 	/**
@@ -78,7 +83,12 @@ public class Jeu {
 	 */
 	public void indiceOrdi (Partie partie) {
 		System.out.println("indiceOrdi() de Jeu");
-		masterPlus.resolve(partie);
+        if(partie.getModeDePartie().equals(ModeDePartie.PLUS_CHAL)){
+            masterPlus.resolve(partie);
+        }
+        else {
+            masterMastermind.resolve(partie);
+        }
 	}
 
 	/**
@@ -88,7 +98,12 @@ public class Jeu {
 	 */
 	public void propOrdi(Partie partie) {
 		System.out.println("propOrdi() de Jeu");
-		joueurPlus.propositionOrdinateur(partie);
+		if(partie.getModeDePartie().equals(ModeDePartie.PLUS_CHAL)){
+            joueurPlus.propositionOrdinateur(partie);
+        }
+		else {
+		    joueurMastermind.propositionOrdinateur(partie);
+        }
 	}
 
 	/**

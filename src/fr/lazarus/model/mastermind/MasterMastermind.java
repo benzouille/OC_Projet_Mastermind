@@ -58,7 +58,7 @@ public class MasterMastermind implements ModelMaster, Observable {
 			if(prop.get(i).equals(sol.get(i))) {
 				prop.remove(i);
 				sol.remove(i);
-				result.add("1");
+				result.add("0");
 			}
 		}
 		//-- Boucle pour trouver les blancs
@@ -67,13 +67,19 @@ public class MasterMastermind implements ModelMaster, Observable {
 				if(prop.get(i).equals(sol.get(y))) {
 					prop.remove(i);
 					sol.remove(y);
-					result.add("2");
+					result.add("1");
 				}
 			}
 		}
-		String str = result.toString();
-
+        String str = "";
+		for (int i = 0; i<result.size(); i++){
+		    str += result.get(i);
+        }
 		partie.setIndice(str);
+        this.partie.addTour();
+        endGame();
+        logger.debug(partie.toString());
+        updateObservateur();
 	}
 
     /**
