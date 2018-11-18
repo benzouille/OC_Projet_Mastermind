@@ -14,6 +14,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import fr.lazarus.model.ModeDePartie;
+import fr.lazarus.model.mastermind.Balle;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -71,11 +73,17 @@ public class PopUpFinPartie extends JDialog implements Observable{
 		jlText = new JLabel();
 		jlText.setFont(font);
 		if (title == "Perdu" ) {
-			jlSolution = new JLabel(partie.getSolution());
-			jlSolution.setFont(font);
-			jlText.setText(perdu);
-			jpText.add(jlText);
-			jpText.add(jlSolution);
+			if(partie.getModeDePartie().equals(ModeDePartie.PLUS_CHAL) || partie.getModeDePartie().equals(ModeDePartie.PLUS_DEF)) {
+                jlSolution = new JLabel(partie.getSolution());
+
+            }
+            else{
+                jlSolution = new JLabel(partie.getSolution());
+            }
+            jlSolution.setFont(font);
+            jlText.setText(perdu);
+            jpText.add(jlText);
+            jpText.add(jlSolution);
 		}
 		else {
 			jlText.setText(gagne);
@@ -133,6 +141,20 @@ public class PopUpFinPartie extends JDialog implements Observable{
 			System.exit(0);
 		}
 	}
+
+    /**
+     * transforme les charactères d'un string en suite d'images inserés dans un JPanel.
+     * @param str String à convertir
+     * @param jPanel panel dans lequel y ajouter les images
+     * @param balles le tableau d'objet balle pour aller y chercher les images
+     */
+    public void stringToImage(String str, JPanel jPanel, Balle[] balles){
+        for(int i = 0; i<str.length(); i++){
+            JLabel jLabel = new JLabel(balles[Character.getNumericValue(str.charAt(i))].getImageIconMoy());
+            jPanel.add(jLabel);
+        }
+        jPanel.revalidate();
+    }
 
 	/**
 	 * Ajout des observateurs

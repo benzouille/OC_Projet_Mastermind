@@ -73,7 +73,7 @@ public class CenterGamePanelMastermind extends JPanel {
         for (int i=0; i<config.getTourPlusMoins()+1; i++) {
             //- La numérotation du nombre de tour
             JLabel jlTour = new JLabel(tour[i]);
-            jlTour.setVisible(true);
+            jlTour.setVisible(false);
             jlTour.setFont(font);
             jlTour.setHorizontalAlignment(JLabel.RIGHT);
             jpLeft.add(jlTour);
@@ -83,7 +83,7 @@ public class CenterGamePanelMastermind extends JPanel {
             if (i > 0) {
                 jpProp.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
             }
-            jpProp.setVisible(true);
+            jpProp.setVisible(false);
             jpProp.setBackground(Color.WHITE);
             jpProp.setPreferredSize(new Dimension(350, 35));
             jpProp.setFont(font);
@@ -91,7 +91,7 @@ public class CenterGamePanelMastermind extends JPanel {
 
             //- Les indications du Maitre du jeux
             JPanel jpIndic = new JPanel();
-            jpIndic.setVisible(true);
+            jpIndic.setVisible(false);
             jpProp.setPreferredSize(new Dimension(150, 35));
             jpIndic.setFont(font);
             jpIndic.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
@@ -118,6 +118,11 @@ public class CenterGamePanelMastermind extends JPanel {
         contentPane.add(jpCenter, BorderLayout.CENTER);
     }
 
+    /**
+     * transforme les charactères d'un string en suite d'images inserés dans un JPanel.
+     * @param str String à convertir
+     * @param jPanel panel dans lequel y ajouter les images
+     */
     public void stringToImage(String str, JPanel jPanel){
         for(int i = 0; i<str.length(); i++){
             JLabel jLabel = new JLabel(balles[Character.getNumericValue(str.charAt(i))].getImageIconMoy());
@@ -126,6 +131,12 @@ public class CenterGamePanelMastermind extends JPanel {
         jPanel.revalidate();
     }
 
+    /**
+     * transforme les charactères d'un string en suite d'images inserés dans un JPanel.
+     * @param str String à convertir
+     * @param jPanel panel dans lequel y ajouter les images
+     * @param balles le tableau d'objet balle pour aller y chercher les images
+     */
     public void stringToImage(String str, JPanel jPanel,Balle[] balles){
         for(int i = 0; i<str.length(); i++){
             if (balles == ballesIndice){
@@ -136,17 +147,18 @@ public class CenterGamePanelMastermind extends JPanel {
                 JLabel jLabel = new JLabel(balles[Character.getNumericValue(str.charAt(i))].getImageIconMoy());
                 jPanel.add(jLabel);
             }
+
         }
         jPanel.revalidate();
     }
 
     public void setVisibleLine(int index) {
-        if (partie.getModeDePartie() == ModeDePartie.PLUS_CHAL) {
+        if (partie.getModeDePartie() == ModeDePartie.MAST_CHAL) {
             listLigneTableau.get(index).getJlTour().setVisible(true);
             listLigneTableau.get(index).getJpIndic().setVisible(true);
             listLigneTableau.get(index).getJpProps().setVisible(true);
         }
-        else if (partie.getModeDePartie() == ModeDePartie.PLUS_DEF) {
+        else if (partie.getModeDePartie() == ModeDePartie.MAST_DEF) {
             listLigneTableau.get(index).getJlTour().setVisible(true);
             listLigneTableau.get(index).getJpIndic().setVisible(true);
             listLigneTableau.get(index).getJpProps().setVisible(true);
@@ -158,6 +170,7 @@ public class CenterGamePanelMastermind extends JPanel {
     public void addDataLine(Partie partie) {
         if (partie.getModeDePartie() == ModeDePartie.MAST_CHAL) {
             stringToImage(partie.getProposition(), listLigneTableau.get(partie.getTour()).getJpProps());
+
         }
         else if (partie.getModeDePartie() == ModeDePartie.MAST_DEF) {
             stringToImage(partie.getProposition(), listLigneTableau.get(partie.getTour()+1).getJpProps());

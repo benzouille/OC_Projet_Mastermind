@@ -83,12 +83,10 @@ public class MasterPlus implements ModelMaster, Observable {
 	 * @return partie
 	 */
 	public Partie endGame() {
-		System.out.println("endGame() de MasterPlus");
 		int prop = Integer.parseInt(proposition);
 		int sol = Integer.parseInt(solution);
 		if (sol == prop) {
 			partie.setEnCours(false);
-			@SuppressWarnings("unused")
 			PopUpFinPartie pufp = new PopUpFinPartie(null, "Gagné", true, partie, obs);
 		}
 		else {
@@ -96,7 +94,6 @@ public class MasterPlus implements ModelMaster, Observable {
 			}
 			else {
 				partie.setEnCours(false);
-				@SuppressWarnings("unused")
 				PopUpFinPartie pufp = new PopUpFinPartie(null, "Perdu", true, partie, obs);
 			}
 		}

@@ -65,7 +65,7 @@ public class GamePanelMastermind  extends JPanel {
      */
     public GamePanelMastermind(Configuration config, ModeDeJeu modeDeJeu, Partie partie, Controller controller) {
         this.partie = partie;
-        partie.setTour(1);
+        //partie.setTour(1);
         this.modeDeJeu = modeDeJeu;
         this.config = config;
         this.controller = controller;
@@ -207,7 +207,8 @@ public class GamePanelMastermind  extends JPanel {
         jpCentreBas.setPreferredSize(new Dimension(350, 75));
         jpCentreBas.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
         jpSolution = new JPanel();
-        stringToImage(partie.getSolution(), jpSolution, balles);
+        //stringToImage(partie.getSolution(), jpSolution, balles);
+        centerGamePanel.stringToImage(partie.getSolution(), jpSolution, balles);
         jpSolution.setFont(font);
         jpSolution.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
         jpSolution.setAlignmentX(35);
@@ -259,14 +260,6 @@ public class GamePanelMastermind  extends JPanel {
 
     }
 
-    public void stringToImage(String str, JPanel jPanel,Balle[] balles){
-        for(int i = 0; i<str.length(); i++){
-            JLabel jLabel = new JLabel(balles[Character.getNumericValue(str.charAt(i))].getImageIconMoy());
-            jPanel.add(jLabel);
-        }
-        jPanel.revalidate();
-    }
-
     public void devIndice() {
         //TODO modifier pour y inserer les image des balle directement, peut etre avec un stringToBall()
         //jtfProposition.setText(partie.getIndice());
@@ -290,7 +283,7 @@ public class GamePanelMastermind  extends JPanel {
     public void okMastChal() {
         System.out.println("okPlusChal() de GamePanelPlusMoins");
 
-        System.out.println("resultat de isOkProposition : "+ isOkProposition(strProposition) + "longueur de la prop : "+strProposition.length()+ "longueur de la config :"+config.getCombiPlusMoins());
+        System.out.println("resultat de isOkProposition : "+ isOkProposition(strProposition) + "longueur de la prop : "+strProposition.length()+ " longueur de la config :"+config.getCombiMast());
         if (isOkProposition(strProposition)) {
             partie.setProposition(strProposition);
             partie.setActif(false);
@@ -401,14 +394,7 @@ public class GamePanelMastermind  extends JPanel {
             jLabel.revalidate();
         }
 
-        public void mouseClicked(MouseEvent arg0) {
-            System.out.println("ajout de la balle "+ balle.getTypeCouleur().getCouleur() + ".");
-            strProposition += balle.getTypeCouleur().getValeur();
-            System.out.println(strProposition);
-            JLabel jLabel = new JLabel(balle.getImageIconMoy());
-            jpProposition.add(jLabel);
-            jpProposition.revalidate();
-        }
+        public void mouseClicked(MouseEvent arg0) { }
 
         public void mouseEntered(MouseEvent e) {}
 
@@ -420,6 +406,12 @@ public class GamePanelMastermind  extends JPanel {
 
         public void mouseReleased(MouseEvent e) {
             bigSize();
+            System.out.println("ajout de la balle "+ balle.getTypeCouleur().getCouleur() + ".");
+            strProposition += balle.getTypeCouleur().getValeur();
+            System.out.println(strProposition);
+            JLabel jLabel = new JLabel(balle.getImageIconMoy());
+            jpProposition.add(jLabel);
+            jpProposition.revalidate();
         }
     }
 

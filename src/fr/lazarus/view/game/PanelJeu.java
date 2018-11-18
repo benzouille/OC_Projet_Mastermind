@@ -104,14 +104,14 @@ public class PanelJeu extends JPanel {
 		else if(jeu.getModeDeJeu().equals(ModeDeJeu.MAST_DUEL)) {
 			this.setPreferredSize(bigSize);
 			controller = new Controller(configuration,jeu.getPartie1(), jeu);
-			//jpChalMast = new GamePanelMastermind(configuration, jeu.getModeDeJeu(), jeu.getPartie1(), controller);
+			jpChalMast = new GamePanelMastermind(configuration, jeu.getModeDeJeu(), jeu.getPartie1(), controller);
 			jpChalMast.setPreferredSize(smallSize);
 			JPanel jpEspace = new JPanel();
 			jpEspace.setPreferredSize(new Dimension(10, 1040));
 			controller2 = new Controller(configuration,jeu.getPartie2(), jeu);
 			PopUpCombi popUpCombi = new PopUpCombi(null, "choix de la combinaison", true, configuration, jeu.getPartie2(), obs);
 			jeu.getPartie2().setActif(false);
-			//jpDefMast = new GamePanelMastermind(configuration, jeu.getModeDeJeu(), jeu.getPartie2(), controller);
+			jpDefMast = new GamePanelMastermind(configuration, jeu.getModeDeJeu(), jeu.getPartie2(), controller);
 			jpDefMast.setPreferredSize(smallSize);
 
 			this.setLayout(new BorderLayout());

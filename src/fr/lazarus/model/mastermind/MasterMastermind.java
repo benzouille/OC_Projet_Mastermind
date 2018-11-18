@@ -11,7 +11,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
+/**
+ * Classe du model mastermind retournant un indice en fonction de la proposition donnée
+ *
+ * @author Ben
+ */
 public class MasterMastermind implements ModelMaster, Observable {
 
     //-- Les logs
@@ -25,6 +31,12 @@ public class MasterMastermind implements ModelMaster, Observable {
 	private String solution;
 	private String proposition;
 
+    private int noir = 0, blanc =1;
+
+    private ArrayList<Integer> prop;
+    private ArrayList<Integer> sol;
+    private ArrayList<Integer> result;
+
 	public MasterMastermind(Configuration config, Partie partie, Observateur obs){
 	    this.config = config;
 	    this.partie = partie;
@@ -32,12 +44,12 @@ public class MasterMastermind implements ModelMaster, Observable {
         this.addObservateur(obs);
 
         if (partie.getModeDePartie().equals(ModeDePartie.MAST_CHAL)) {
-            this.partie.ordiPartie(config.getCombiPlusMoins(), config.getCouleurMast());
+            this.partie.ordiPartie(config.getCombiMast(), config.getCouleurMast());
         }
     }
 
     /**
-     * Compare les differences entre la proposition et la solution puis modifie dans l'objet partie l'indices avec des 1 pour les noirs et des 2 pour les blancs
+     * Compare les differences entre la proposition et la solution puis modifie dans l'objet partie l'indices avec des 0 pour les noirs et des 1 pour les blancs
      * @param partie Objet Partie
      * @return partie Objet Partie
      */
@@ -46,58 +58,86 @@ public class MasterMastermind implements ModelMaster, Observable {
 		solution = partie.getSolution();
 		proposition = partie.getProposition();
 
-		ArrayList<Integer> prop = new ArrayList<Integer>();
-		ArrayList<Integer> sol = new ArrayList<Integer>();
-		ArrayList<String> result = new ArrayList<String>();
+		prop = new ArrayList<>();
+		sol = new ArrayList<>();
+		result = new ArrayList<>();
+
 		for (int i = 0; i<proposition.length(); i++) {
 			prop.add(Integer.valueOf(proposition.substring(i, i+1)));
 			sol.add(Integer.valueOf(solution.substring(i, i+1)));
 		}
-		//-- Boucle pour trouver les noirs
-		for (int i = 0; i<prop.size(); i++) {
-			if(prop.get(i).equals(sol.get(i))) {
-				prop.remove(i);
-				sol.remove(i);
-				result.add("0");
-			}
-		}
-		//-- Boucle pour trouver les blancs
-		for (int i = 0; i<prop.size(); i++) {
-			for(int y = 0; y<sol.size(); y++) {
-				if(prop.get(i).equals(sol.get(y))) {
-					prop.remove(i);
-					sol.remove(y);
-					result.add("1");
-				}
-			}
-		}
+
+        //les noirs
+        boolean match = false;
+        for (int i = 0; i<prop.size(); i++) {
+            if (match) {
+                i = 0;
+                match = false;
+            }
+            if (prop.get(i).equals(sol.get(i))) {
+                addIndice(noir,i,i);
+                match = true;
+            }
+        }
+
+        //les blancs
+        for (int i = 0; i < prop.size();) {
+            for (int y = 0; y < sol.size(); y++) {
+                if (prop.get(i).equals(sol.get(y))) {
+                    addIndice(blanc,i,y);
+                    match = true;
+                    break;
+                }
+            }
+            if (match) {
+                i = 0;
+                match = false;
+            }
+            else {
+                i++;
+            }
+        }
+
         String str = "";
 		for (int i = 0; i<result.size(); i++){
 		    str += result.get(i);
         }
 		partie.setIndice(str);
-        this.partie.addTour();
-        endGame();
+        if(partie.getModeDePartie() == ModeDePartie.MAST_CHAL) {
+            this.partie.addTour();
+            endGame();
+        }
         logger.debug(partie.toString());
         updateObservateur();
 	}
+
+    /**
+     * Ajout des indices dans l'arrayList result et supprime l'index donné dans les arrayList prop et sol
+     * @param couleur int
+     * @param indexProp int
+     * @param indexSol int
+     */
+    private void addIndice(int couleur, int indexProp, int indexSol){
+        result.add(couleur);
+        prop.remove(indexProp);
+        sol.remove(indexSol);
+    }
 
     /**
      * Verifie si l'objet partie correspond aux conditions de victoire ou défaite
      * @return partie
      */
     public Partie endGame() {
+        //TODO modifier les conditions de victoire et/ou le placement de celle-ci
         System.out.println("endGame() de MasterMastermind");
-        int prop = Integer.parseInt(proposition);
-        int sol = Integer.parseInt(solution);
-        if (sol == prop) {
+        int propInt = Integer.parseInt(proposition);
+        int solInt = Integer.parseInt(solution);
+        if (solInt == propInt) {
             partie.setEnCours(false);
             PopUpFinPartie pufp = new PopUpFinPartie(null, "Gagné", true, partie, obs);
         }
         else {
-            if(partie.getTour() < config.getTourMast()) {
-            }
-            else {
+            if(partie.getTour() == config.getTourMast()) {
                 partie.setEnCours(false);
                 PopUpFinPartie pufp = new PopUpFinPartie(null, "Perdu", true, partie, obs);
             }

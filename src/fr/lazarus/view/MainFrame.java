@@ -160,8 +160,27 @@ public class MainFrame extends JFrame implements Observateur {
                 contentPane.revalidate();
             }});
         mastermind.add(mastermindChal);
+
+        mastermindDef.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                jeu = new Jeu(ModeDeJeu.MAST_DEF, config, obs);
+                panelJeu = new PanelJeu(jeu, config, obs);
+                contentPane.removeAll();
+                contentPane.add(panelJeu, BorderLayout.CENTER);
+                contentPane.revalidate();
+            }});
         mastermind.add(mastermindDef);
+
+        mastermindDuel.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                jeu = new Jeu(ModeDeJeu.MAST_DUEL, config, obs);
+                panelJeu = new PanelJeu(jeu, config, obs);
+                contentPane.removeAll();
+                contentPane.add(panelJeu, BorderLayout.CENTER);
+                contentPane.revalidate();
+            }});
         mastermind.add(mastermindDuel);
+
         mastermind.setMnemonic('m');
 
         fichier.addSeparator();
