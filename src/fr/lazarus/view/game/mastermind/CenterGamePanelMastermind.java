@@ -68,15 +68,15 @@ public class CenterGamePanelMastermind extends JPanel {
     public void initPanel(){
 
         jpLeft.setLayout(new GridLayout(config.getTourMast()+1, 1, 10, 5));
-        jpLeft.setPreferredSize(new Dimension(125, 1200));
+        //jpLeft.setPreferredSize(new Dimension(125, 700));
         jpLeft.setBorder(BorderFactory.createLineBorder(Color.GREEN));
 
         jpCenter.setLayout(new GridLayout(config.getTourMast()+1, 2, 5, 5));
-        jpCenter.setPreferredSize(new Dimension(350, 1200));
+        //jpCenter.setPreferredSize(new Dimension(350, 700));
         jpCenter.setBorder(BorderFactory.createLineBorder(Color.PINK));
 
         jpRight.setLayout(new GridLayout(config.getTourMast()+1, 1, 5, 5));
-        jpRight.setPreferredSize(new Dimension(150, 1200));
+        //jpRight.setPreferredSize(new Dimension(150, 700));
         jpRight.setBorder(BorderFactory.createLineBorder(Color.YELLOW));
 
         //-- Je rempli le GridLayout
@@ -97,14 +97,14 @@ public class CenterGamePanelMastermind extends JPanel {
             }
             jpProp.setVisible(true);
             jpProp.setBackground(Color.WHITE);
-            jpProp.setMinimumSize(new Dimension(350, 60));
+            jpProp.setPreferredSize(new Dimension(350, 60));
             jpProp.setFont(font);
             jpCenter.add(jpProp);
 
             //- Les indications du Maitre du jeux
             JPanel jpIndic = new JPanel();
             jpIndic.setVisible(true);
-            jpIndic.setMinimumSize(new Dimension(150, 60));
+            jpIndic.setPreferredSize(new Dimension(150, 60));
             jpIndic.setFont(font);
             jpIndic.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
             jpRight.add(jpIndic);
@@ -130,9 +130,10 @@ public class CenterGamePanelMastermind extends JPanel {
         jpScrollable.add(jpLeft, BorderLayout.WEST);
         jpScrollable.add(jpCenter, BorderLayout.CENTER);
         jpScrollable.add(jpRight, BorderLayout.EAST);
+        jScrollPane.setBorder(BorderFactory.createLineBorder(Color.black));
         jScrollPane.setViewportView(jpScrollable);
 
-        jScrollPane.setBounds(10, 101, 400, 200);
+        jScrollPane.setBounds(10, 101, 750, 700);
         contentPane.add(jScrollPane, BorderLayout.CENTER);
 
     }
@@ -145,7 +146,7 @@ public class CenterGamePanelMastermind extends JPanel {
     public void stringToImage(String str, JPanel jPanel){
         for(int i = 0; i<str.length(); i++){
             JLabel jLabel = new JLabel(balles[Character.getNumericValue(str.charAt(i))].getImageIconMoy());
-            jLabel.setBorder(new EmptyBorder(30, 0, 0, 0));
+            //jLabel.setBorder(new EmptyBorder(30, 0, 0, 0));
             jPanel.add(jLabel);
         }
         jPanel.revalidate();
