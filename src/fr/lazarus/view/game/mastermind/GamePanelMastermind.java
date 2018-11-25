@@ -10,6 +10,7 @@ import fr.lazarus.model.mastermind.TypeCouleur;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -22,8 +23,8 @@ public class GamePanelMastermind  extends JPanel {
 
     private Container contentPane = this;
 
-    private JLabel jlBleu, jlBrun, jlCyan, jlJaune, jlOrange, jlRose, jlRouge, jlVert, jlVertClair, jlViolet;
-    private JLabel label[] = {jlBleu, jlBrun, jlCyan, jlJaune, jlOrange, jlRose, jlRouge, jlVert, jlVertClair, jlViolet};
+    private JLabel jlBleu, jlBrun, jlCyan, jlJaune, jlOrange, jlRose, jlRouge, jlVert, jlVertClair, jlViolet, jlNoir, jlBlanc;
+    private JLabel label[] = {jlBleu, jlBrun, jlCyan, jlJaune, jlOrange, jlRose, jlRouge, jlVert, jlVertClair, jlViolet, jlNoir, jlBlanc};
 
     private Balle bleu = new Balle(TypeCouleur.BLEU),
             brun = new Balle(TypeCouleur.BRUN),
@@ -34,18 +35,14 @@ public class GamePanelMastermind  extends JPanel {
             rouge = new Balle(TypeCouleur.ROUGE),
             vert = new Balle(TypeCouleur.VERT),
             vertClair = new Balle(TypeCouleur.VERT_CLAIR),
-            violet = new Balle(TypeCouleur.VIOLET);
-
-    private Balle balles[] = {bleu, brun, cyan, jaune, orange, rose, rouge, vert, vertClair, violet};
-
-    private Balle noir = new Balle(TypeCouleur.NOIR),
+            violet = new Balle(TypeCouleur.VIOLET),
+            noir = new Balle(TypeCouleur.NOIR),
             blanc = new Balle(TypeCouleur.BLANC);
 
-    private Balle ballesIndice[] = {noir, blanc};
+    private Balle balles[] = {bleu, brun, cyan, jaune, orange, rose, rouge, vert, vertClair, violet, noir, blanc};
 
     private JPanel jpSouth, jpGauche, jpGaucheHaut, jpGaucheBas, jpCentre, jpCentreHaut, jpCentreBas, jpDroit, jpDroitHaut, jpDroitBas, jpSolution, jpProposition;
     private JLabel jlTitreSolution, jlTitreProposition, jlTitreIndice;
-    private JTextField jtfIndice;
     private JButton okButton, cancelButton;
 
     private JPanel jpTop = new JPanel(), jpRight = new JPanel();
@@ -94,6 +91,10 @@ public class GamePanelMastermind  extends JPanel {
         centerGamePanel = new CenterGamePanelMastermind(config, partie);
         centerGamePanel.add(jpRight, BorderLayout.EAST);
 
+        if (partie.getModeDePartie() == ModeDePartie.MAST_DEF) {
+            centerGamePanel.addDataLine(partie);
+        }
+
         initPanelSouth();
 
         contentPane.add(jpTop, BorderLayout.NORTH);
@@ -112,20 +113,20 @@ public class GamePanelMastermind  extends JPanel {
         jpRight.setPreferredSize(new Dimension(125, 700));
         jpRight.setBorder(BorderFactory.createLineBorder(Color.MAGENTA));
 
-        Balle[] typeBalle = balles;
-        int nbreBalle =config.getCouleurMast();
+        int nbreBalle = config.getCouleurMast();
+        int i = 0;
         if(partie.getModeDePartie().equals(ModeDePartie.MAST_DEF)) {
-            nbreBalle = ballesIndice.length;
-            typeBalle = ballesIndice;
+            nbreBalle = balles.length;
+            i = 10;
         }
-            for (int i = 0; i < nbreBalle; i++) {
-                label[i] = new JLabel(typeBalle[i].getImageIcon());
-                label[i].setBackground(Color.WHITE);
-                label[i].setPreferredSize(new Dimension(60, 60));
-                label[i].addMouseListener(new GamePanelMastermind.CouleurListener<GamePanelMastermind>(balles[i], label[i]));
-                jpRight.add(label[i]);
-            }
+        for (i =i ;i < nbreBalle; i++) {
+            label[i] = new JLabel(balles[i].getImageIcon());
+            label[i].setBackground(Color.WHITE);
+            label[i].setPreferredSize(new Dimension(60, 60));
+            label[i].addMouseListener(new GamePanelMastermind.CouleurListener<GamePanelMastermind>(balles[i], label[i]));
+            jpRight.add(label[i]);
         }
+    }
 
     /**
      * Panel sud avec les entrées pour les propositions en mode challanger et les indices en mode defenseur
@@ -198,8 +199,10 @@ public class GamePanelMastermind  extends JPanel {
         jpProposition = new JPanel();
         jpProposition.setBackground(Color.white);
         jpProposition.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
-        jpProposition.setPreferredSize(new Dimension(350, 70));
+        jpProposition.setPreferredSize(new Dimension(380, 70));
         jpProposition.addKeyListener(new EnterListener());
+
+
 
         jpCentreHaut.add(jpProposition);
 
@@ -207,12 +210,10 @@ public class GamePanelMastermind  extends JPanel {
         jpCentreBas.setPreferredSize(new Dimension(350, 75));
         jpCentreBas.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
         jpSolution = new JPanel();
-        //stringToImage(partie.getSolution(), jpSolution, balles);
         centerGamePanel.stringToImage(partie.getSolution(), jpSolution, balles);
         jpSolution.setFont(font);
         jpSolution.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
-        jpSolution.setAlignmentX(35);
-        jpSolution.setPreferredSize(new Dimension(350, 70));
+        jpSolution.setPreferredSize(new Dimension(380, 70));
         jpCentreBas.add(jpSolution);
         jpCentreBas.setVisible(devMode);
         if (partie.getModeDePartie() == ModeDePartie.PLUS_DEF) {
@@ -281,7 +282,7 @@ public class GamePanelMastermind  extends JPanel {
     }
 
     public void okMastChal() {
-        System.out.println("okPlusChal() de GamePanelPlusMoins");
+        System.out.println("okPlusChal() de GamePanelMast");
 
         System.out.println("resultat de isOkProposition : "+ isOkProposition(strProposition) + "longueur de la prop : "+strProposition.length()+ " longueur de la config :"+config.getCombiMast());
         if (isOkProposition(strProposition)) {
@@ -299,16 +300,15 @@ public class GamePanelMastermind  extends JPanel {
     }
 
     public void okMastDef() {
-        System.out.println("okPlusDef() de GamePanelPlusMoins");
-        String indice = "";
-        if(isOkIndice(indice)){
-            partie.setIndice(indice);
+        System.out.println("okPlusDef() de GamePanelMast");
+        if(isOkIndice(strProposition)){
+            partie.setIndice(strProposition);
             partie.setActif(false);
             controller.sendIndice(partie);
             centerGamePanel.addDataLine(partie);
             if(config.isDevModEnJeu() == true && partie.getModeDePartie() == ModeDePartie.MAST_DEF) {
-                controller.sendProposition(partie);
-                //TODO mettre l'indice transformé en image dans le jfProposition
+                //controller.sendProposition(partie);
+                //TODO ici c'est pour le mode dev mettre l'indice transformé en image dans le jfProposition
                 //jtfProposition.setText(partie.getIndice());
             }
             else {
@@ -319,6 +319,10 @@ public class GamePanelMastermind  extends JPanel {
             if(modeDeJeu == ModeDeJeu.MAST_DUEL) {
                 stopTurn();
             }
+            strProposition = "";
+            jpProposition.removeAll();
+            jpProposition.repaint();
+            jpProposition.revalidate();
             this.revalidate();
         }
     }
@@ -326,10 +330,13 @@ public class GamePanelMastermind  extends JPanel {
     public boolean isOkIndice(String indice) {
         //TODO verifier que l'indice ne dépasse pas la taille du config.getCombiMast();
         dataIsOk = true;
-        if (indice.length() != config.getCombiMast()) {
-            JOptionPane.showMessageDialog(null, "Erreur ! \n Veuillez entrer une solution à "+ config.getCombiMast() +".", "ERREUR", JOptionPane.ERROR_MESSAGE);
+        if (indice.length() > config.getCombiMast()) {
+            JOptionPane.showMessageDialog(null, "Erreur ! \n Veuillez entrer une longueur d'indice plus petite que "+ config.getCombiMast() +".", "ERREUR", JOptionPane.ERROR_MESSAGE);
             dataIsOk = false;
-            cancelButton.doClick();
+            strProposition = "";
+            jpProposition.removeAll();
+            jpProposition.repaint();
+            jpProposition.revalidate();
         }
         else {
             dataIsOk = true;
@@ -406,11 +413,22 @@ public class GamePanelMastermind  extends JPanel {
 
         public void mouseReleased(MouseEvent e) {
             bigSize();
-            System.out.println("ajout de la balle "+ balle.getTypeCouleur().getCouleur() + ".");
-            strProposition += balle.getTypeCouleur().getValeur();
-            System.out.println(strProposition);
-            JLabel jLabel = new JLabel(balle.getImageIconMoy());
-            jpProposition.add(jLabel);
+            if (jpProposition.getComponentCount()+1 > config.getCombiMast()){
+                JOptionPane.showMessageDialog(null, "Erreur ! \n Vous avez atteint le nombre maximal de balles.", "ERREUR", JOptionPane.ERROR_MESSAGE);
+            }
+            else {
+                int chiffre = balle.getTypeCouleur().getValeur();
+                if (chiffre == 10) {
+                    chiffre = 0;
+                } else if (chiffre == 11) {
+                    chiffre = 1;
+                }
+                System.out.println(chiffre);
+                strProposition += chiffre;
+                System.out.println(strProposition);
+                JLabel jLabel = new JLabel(balle.getImageIconMoy());
+                jpProposition.add(jLabel);
+            }
             jpProposition.revalidate();
         }
     }

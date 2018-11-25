@@ -106,6 +106,7 @@ public class MasterMastermind implements ModelMaster, Observable {
         if(partie.getModeDePartie() == ModeDePartie.MAST_CHAL) {
             this.partie.addTour();
             endGame();
+
         }
         logger.debug(partie.toString());
         updateObservateur();
@@ -128,10 +129,9 @@ public class MasterMastermind implements ModelMaster, Observable {
      * @return partie
      */
     public Partie endGame() {
-        //TODO modifier les conditions de victoire et/ou le placement de celle-ci
         System.out.println("endGame() de MasterMastermind");
-        int propInt = Integer.parseInt(proposition);
-        int solInt = Integer.parseInt(solution);
+        Long propInt = Long.parseLong(proposition);
+        Long solInt = Long.parseLong(solution);
         if (solInt == propInt) {
             partie.setEnCours(false);
             PopUpFinPartie pufp = new PopUpFinPartie(null, "Gagné", true, partie, obs);

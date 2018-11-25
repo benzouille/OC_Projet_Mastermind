@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 
 import fr.lazarus.model.ModeDePartie;
 import fr.lazarus.model.mastermind.Balle;
+import fr.lazarus.model.mastermind.TypeCouleur;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -32,12 +33,26 @@ public class PopUpFinPartie extends JDialog implements Observable{
 	//-- Les logs
 	private static final Logger logger = LogManager.getLogger();
 	//-- L'observateur
-	private ArrayList<Observateur> listObservateur = new ArrayList<Observateur>();
+	private ArrayList<Observateur> listObservateur = new ArrayList<>();
 	//-- La partie
 	private Partie partie;
+
+    private Balle bleu = new Balle(TypeCouleur.BLEU),
+            brun = new Balle(TypeCouleur.BRUN),
+            cyan = new Balle(TypeCouleur.CYAN),
+            jaune = new Balle(TypeCouleur.JAUNE),
+            orange = new Balle(TypeCouleur.ORANGE),
+            rose = new Balle(TypeCouleur.ROSE),
+            rouge = new Balle(TypeCouleur.ROUGE),
+            vert = new Balle(TypeCouleur.VERT),
+            vertClair = new Balle(TypeCouleur.VERT_CLAIR),
+            violet = new Balle(TypeCouleur.VIOLET);
+
+    private Balle balles[] = {bleu, brun, cyan, jaune, orange, rose, rouge, vert, vertClair, violet};
 	
 	private Font font = new Font("Sego UI",Font.PLAIN,24);
 	private Container contentPane;
+	private JPanel jpSolution;
 	private JLabel jlText, jlSolution;
 	private String gagne = "Bravo vous avez gagné !", 
 	perdu = "Dommage vous avez perdu. La solution était : ",
@@ -58,7 +73,6 @@ public class PopUpFinPartie extends JDialog implements Observable{
 	}
 
 	public void initComponent() {
-		//TODO ajouter si c'est gagné ou perdu si perdu donner la solution donc ajouter au constructeur la partie pour le set solution
 		contentPane = this.getContentPane();
 
 		nouvJeu = new JButton("Recommencer");
@@ -75,15 +89,21 @@ public class PopUpFinPartie extends JDialog implements Observable{
 		if (title == "Perdu" ) {
 			if(partie.getModeDePartie().equals(ModeDePartie.PLUS_CHAL) || partie.getModeDePartie().equals(ModeDePartie.PLUS_DEF)) {
                 jlSolution = new JLabel(partie.getSolution());
-
+                jlSolution.setFont(font);
+                jlText.setText(perdu);
+                jpText.add(jlText);
+                jpText.add(jlSolution);
             }
             else{
-                jlSolution = new JLabel(partie.getSolution());
+                jpSolution = new JPanel();
+                jpSolution.setBackground(Color.white);
+                stringToImage(partie.getSolution(), jpSolution, balles);
+                jlText.setText(perdu);
+                jpText.add(jlText);
+                jpText.add(jpSolution);
             }
-            jlSolution.setFont(font);
-            jlText.setText(perdu);
-            jpText.add(jlText);
-            jpText.add(jlSolution);
+
+
 		}
 		else {
 			jlText.setText(gagne);

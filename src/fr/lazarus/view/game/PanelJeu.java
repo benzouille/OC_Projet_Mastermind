@@ -13,8 +13,9 @@ import fr.lazarus.model.ModeDeJeu;
 import fr.lazarus.model.ModeDePartie;
 import fr.lazarus.observer.Observateur;
 import fr.lazarus.view.game.mastermind.GamePanelMastermind;
+import fr.lazarus.view.game.mastermind.PopUpCombiMastermind;
 import fr.lazarus.view.game.plusMoins.GamePanelPlusMoins;
-import fr.lazarus.view.game.plusMoins.PopUpCombi;
+import fr.lazarus.view.game.plusMoins.PopUpCombiPlus;
 
 public class PanelJeu extends JPanel {
 
@@ -47,7 +48,7 @@ public class PanelJeu extends JPanel {
 		else if(jeu.getModeDeJeu().equals(ModeDeJeu.PLUS_DEF)) {
 			this.setPreferredSize(smallSize);
 			controller = new Controller(configuration,jeu.getPartie1(), jeu);
-			PopUpCombi popUpCombi = new PopUpCombi(null, "choix de la combinaison", true, configuration, jeu.getPartie1(), obs);
+			PopUpCombiPlus popUpCombiPlus = new PopUpCombiPlus(null, "choix de la combinaison", true, configuration, jeu.getPartie1(), obs);
 			jpDefPlus = new GamePanelPlusMoins(configuration, jeu.getModeDeJeu(), jeu.getPartie1(), controller);
 			if(configuration.isDevModEnJeu() && jeu.getPartie1().getModeDePartie() == ModeDePartie.PLUS_DEF) {
 				controller.sendProposition(jeu.getPartie1());
@@ -64,7 +65,7 @@ public class PanelJeu extends JPanel {
 			JPanel jpEspace = new JPanel();
 			jpEspace.setPreferredSize(new Dimension(10, 1040));
 			controller2 = new Controller(configuration,jeu.getPartie2(), jeu);
-			PopUpCombi popUpCombi = new PopUpCombi(null, "choix de la combinaison", true, configuration, jeu.getPartie2(), obs);
+			PopUpCombiPlus popUpCombiPlus = new PopUpCombiPlus(null, "choix de la combinaison", true, configuration, jeu.getPartie2(), obs);
 			jeu.getPartie2().setActif(false);
 			jpDefPlus = new GamePanelPlusMoins(configuration, jeu.getModeDeJeu(), jeu.getPartie2(), controller);
 			if(configuration.isDevModEnJeu() && jeu.getPartie2().getModeDePartie() == ModeDePartie.PLUS_DEF) {
@@ -90,8 +91,8 @@ public class PanelJeu extends JPanel {
 		else if(jeu.getModeDeJeu().equals(ModeDeJeu.MAST_DEF)) {
 			this.setPreferredSize(smallSize);
 			controller = new Controller(configuration,jeu.getPartie1(), jeu);
-			PopUpCombi popUpCombi = new PopUpCombi(null, "choix de la combinaison", true, configuration, jeu.getPartie1(), obs);
-			//jpDefMast = new GamePanelMastermind(configuration, jeu.getModeDeJeu(), jeu.getPartie1(), controller);
+			PopUpCombiMastermind popUpCombiMastermind = new PopUpCombiMastermind(null, "choix de la combinaison", true, configuration, jeu.getPartie1(), obs);
+			jpDefMast = new GamePanelMastermind(configuration, jeu.getModeDeJeu(), jeu.getPartie1(), controller);
 			if(configuration.isDevModEnJeu() && jeu.getPartie1().getModeDePartie() == ModeDePartie.PLUS_DEF) {
 				controller.sendProposition(jeu.getPartie1());
 				jpDefMast.devIndice();
@@ -109,7 +110,7 @@ public class PanelJeu extends JPanel {
 			JPanel jpEspace = new JPanel();
 			jpEspace.setPreferredSize(new Dimension(10, 1040));
 			controller2 = new Controller(configuration,jeu.getPartie2(), jeu);
-			PopUpCombi popUpCombi = new PopUpCombi(null, "choix de la combinaison", true, configuration, jeu.getPartie2(), obs);
+			PopUpCombiMastermind popUpCombiMastermind = new PopUpCombiMastermind(null, "choix de la combinaison", true, configuration, jeu.getPartie2(), obs);
 			jeu.getPartie2().setActif(false);
 			jpDefMast = new GamePanelMastermind(configuration, jeu.getModeDeJeu(), jeu.getPartie2(), controller);
 			jpDefMast.setPreferredSize(smallSize);
@@ -139,13 +140,25 @@ public class PanelJeu extends JPanel {
 	 */
 
 	public void defTurn() {
-		jpChalPlus.stopTurn();
-		updateFocus(jpDefPlus, 2);
+		if(jeu.getModeDeJeu().equals(ModeDeJeu.PLUS_DUEL)) {
+            jpChalPlus.stopTurn();
+            updateFocus(jpDefPlus, 2);
+        }
+        else {
+            jpChalMast.stopTurn();
+            updateFocus(jpDefMast, 2);
+        }
 	}
 
 	public void chalTurn() {
-		jpDefPlus.stopTurn();
-		updateFocus(jpChalPlus, 2);
+        if(jeu.getModeDeJeu().equals(ModeDeJeu.PLUS_DUEL)) {
+            jpDefPlus.stopTurn();
+            updateFocus(jpChalPlus, 2);
+        }
+        else{
+            jpDefMast.stopTurn();
+            updateFocus(jpChalMast, 2);
+        }
 	}
 
 	/**
@@ -171,6 +184,31 @@ public class PanelJeu extends JPanel {
 			}
 		}).start();
 	}
+
+    /**
+     * Mettre à jour le focus du second panneau de jeu via un Thread Indépendant.
+     * @param jpTarget
+     */
+    public static void updateFocus(GamePanelMastermind jpTarget, Integer secondes) {
+        new Thread(new Runnable() {
+            public void run() {
+                sleep(secondes);
+                //-- Modification de notre composant dans l'EDT
+                Thread t = new Thread(new Runnable() {
+                    public void run() {
+                        jpTarget.newTurn();
+                    }
+                });
+                //-- Si l'EDT est actif, le Thread est lancée sinon il le sera par l'EDT plus tard
+                if (SwingUtilities.isEventDispatchThread())
+                    t.start();
+                else {
+                    SwingUtilities.invokeLater(t);
+                }
+            }
+        }).start();
+    }
+
 	/**
 	 * Lance une temporisation de x secondes.
 	 */

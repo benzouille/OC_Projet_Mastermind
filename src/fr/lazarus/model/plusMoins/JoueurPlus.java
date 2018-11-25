@@ -125,7 +125,7 @@ public class JoueurPlus implements ModelJoueur, Observable {
 				PopUpFinPartie pufp = new PopUpFinPartie(null, "Perdu", true, partie, obs);
 			}
 		}
-		System.out.println("endGame() de Joueur");
+		System.out.println("endGame() de JoueurPlus");
 		updateObservateur();
 		return partie;
 	}

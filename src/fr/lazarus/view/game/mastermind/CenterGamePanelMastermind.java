@@ -8,6 +8,7 @@ import fr.lazarus.model.mastermind.TypeCouleur;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,12 @@ public class CenterGamePanelMastermind extends JPanel {
     private Partie partie;
 
     private JPanel jpLeft = new JPanel(),
-            jpCenter = new JPanel();
+            jpCenter = new JPanel(),
+            jpRight = new JPanel(),
+            jpScrollable = new JPanel();
+
+    private JScrollPane jScrollPane = new JScrollPane();
+
 
     private Font font = new Font("Sego UI",Font.PLAIN,24);
 
@@ -61,21 +67,27 @@ public class CenterGamePanelMastermind extends JPanel {
 
     public void initPanel(){
 
-        jpLeft.setLayout(new GridLayout(config.getTourPlusMoins()+1, 1, 10, 5));
-        jpLeft.setPreferredSize(new Dimension(125, 700));
+        jpLeft.setLayout(new GridLayout(config.getTourMast()+1, 1, 10, 5));
+        jpLeft.setPreferredSize(new Dimension(125, 1200));
         jpLeft.setBorder(BorderFactory.createLineBorder(Color.GREEN));
 
-        jpCenter.setLayout(new GridLayout(config.getTourPlusMoins()+1, 2, 5, 5));
-        jpCenter.setPreferredSize(new Dimension(500, 700));
+        jpCenter.setLayout(new GridLayout(config.getTourMast()+1, 2, 5, 5));
+        jpCenter.setPreferredSize(new Dimension(350, 1200));
         jpCenter.setBorder(BorderFactory.createLineBorder(Color.PINK));
 
+        jpRight.setLayout(new GridLayout(config.getTourMast()+1, 1, 5, 5));
+        jpRight.setPreferredSize(new Dimension(150, 1200));
+        jpRight.setBorder(BorderFactory.createLineBorder(Color.YELLOW));
+
         //-- Je rempli le GridLayout
-        for (int i=0; i<config.getTourPlusMoins()+1; i++) {
+        for (int i=0; i<config.getTourMast()+1; i++) {
             //- La numérotation du nombre de tour
             JLabel jlTour = new JLabel(tour[i]);
-            jlTour.setVisible(false);
+            jlTour.setVisible(true);
             jlTour.setFont(font);
+            jlTour.setPreferredSize(new Dimension(125, 60));
             jlTour.setHorizontalAlignment(JLabel.RIGHT);
+            jlTour.setVerticalAlignment(JLabel.CENTER);
             jpLeft.add(jlTour);
 
             //-- Les champs de saisie
@@ -83,19 +95,19 @@ public class CenterGamePanelMastermind extends JPanel {
             if (i > 0) {
                 jpProp.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
             }
-            jpProp.setVisible(false);
+            jpProp.setVisible(true);
             jpProp.setBackground(Color.WHITE);
-            jpProp.setPreferredSize(new Dimension(350, 35));
+            jpProp.setMinimumSize(new Dimension(350, 60));
             jpProp.setFont(font);
             jpCenter.add(jpProp);
 
             //- Les indications du Maitre du jeux
             JPanel jpIndic = new JPanel();
-            jpIndic.setVisible(false);
-            jpProp.setPreferredSize(new Dimension(150, 35));
+            jpIndic.setVisible(true);
+            jpIndic.setMinimumSize(new Dimension(150, 60));
             jpIndic.setFont(font);
             jpIndic.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
-            jpCenter.add(jpIndic);
+            jpRight.add(jpIndic);
 
             ligneTableau = new LigneTableauMast(jlTour, jpProp, jpIndic);
             listLigneTableau.add(ligneTableau);
@@ -114,8 +126,15 @@ public class CenterGamePanelMastermind extends JPanel {
 
         setVisibleLine(0);
 
-        contentPane.add(jpLeft, BorderLayout.WEST);
-        contentPane.add(jpCenter, BorderLayout.CENTER);
+        jpScrollable.setLayout(new BorderLayout());
+        jpScrollable.add(jpLeft, BorderLayout.WEST);
+        jpScrollable.add(jpCenter, BorderLayout.CENTER);
+        jpScrollable.add(jpRight, BorderLayout.EAST);
+        jScrollPane.setViewportView(jpScrollable);
+
+        jScrollPane.setBounds(10, 101, 400, 200);
+        contentPane.add(jScrollPane, BorderLayout.CENTER);
+
     }
 
     /**
@@ -126,6 +145,7 @@ public class CenterGamePanelMastermind extends JPanel {
     public void stringToImage(String str, JPanel jPanel){
         for(int i = 0; i<str.length(); i++){
             JLabel jLabel = new JLabel(balles[Character.getNumericValue(str.charAt(i))].getImageIconMoy());
+            jLabel.setBorder(new EmptyBorder(30, 0, 0, 0));
             jPanel.add(jLabel);
         }
         jPanel.revalidate();

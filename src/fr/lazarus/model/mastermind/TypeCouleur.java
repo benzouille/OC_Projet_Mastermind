@@ -8,11 +8,16 @@ package fr.lazarus.model.mastermind;
 public enum TypeCouleur {
 
 	BLEU(0, "bleu"), BRUN(1, "brun"), CYAN(2, "cyan"), JAUNE(3, "jaune"), ORANGE(4, "orange"), ROSE(5, "rose"), ROUGE(6, "rouge"), VERT(7, "vert"), 
-	VERT_CLAIR(8, "vertClair"), VIOLET(9, "violet"), BLANC(10, "blanc"), NOIR(11, "noir");
+	VERT_CLAIR(8, "vertClair"), VIOLET(9, "violet"), NOIR(10, "noir"), BLANC(11, "blanc");
 
 	private final int valeur;
 	private final String nom;
 
+    /**
+     * Ajoute à l'enum une clé valeur (int) et nom (String)
+     * @param valeur int
+     * @param nom String
+     */
 	private TypeCouleur(int valeur, String nom) {
 		this.valeur = valeur;
 		this.nom = nom;
@@ -46,9 +51,9 @@ public enum TypeCouleur {
 		case 9 :
 			typeCouleur = TypeCouleur.VIOLET;
 		case 10 :
-			typeCouleur = TypeCouleur.BLANC;
-		case 11 :
 			typeCouleur = TypeCouleur.NOIR;
+		case 11 :
+			typeCouleur = TypeCouleur.BLANC;
 		}
 		return typeCouleur;
 	}

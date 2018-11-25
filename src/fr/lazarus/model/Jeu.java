@@ -29,7 +29,6 @@ public class Jeu {
 	 * Initialise les Objets Joueur et Master en fonction du mode de jeu et crée un objet partie supplémentaire pour le mode duel
 	 */
 	public void initJeu() {
-		//TODO en fonction du ModeDeJeu lancer le master le joueur avec ordinateur/humain
 		if(modeDeJeu.equals(ModeDeJeu.PLUS_CHAL)) {
 			partie1 = new Partie("partie1", ModeDePartie.PLUS_CHAL);
             masterPlus = new MasterPlus(config, partie1, obs);
@@ -47,10 +46,9 @@ public class Jeu {
             joueurPlus.initOrdinateur(partie1);
 		}
 		else if(modeDeJeu.equals(ModeDeJeu.MAST_DEF)) {
-			//TODO à modifier
 			partie1 = new Partie("partie1", ModeDePartie.MAST_DEF);
 			joueurMastermind = new JoueurMastermind(config, partie1, obs);
-			//joueur.initOrdinateur(partie1);
+			joueurMastermind.initOrdinateur(partie1);
 		}
 		else if(modeDeJeu.equals(ModeDeJeu.PLUS_DUEL)) {
 			partie1 = new Partie("partie1", ModeDePartie.PLUS_CHAL);
@@ -86,7 +84,13 @@ public class Jeu {
         if(partie.getModeDePartie().equals(ModeDePartie.PLUS_CHAL)){
             masterPlus.resolve(partie);
         }
-        else {
+        else if(partie.getModeDePartie().equals(ModeDePartie.PLUS_DEF)) {
+            masterPlus.resolve(partie);
+        }
+        else if (partie.getModeDePartie().equals(ModeDePartie.MAST_CHAL)){
+            masterMastermind.resolve(partie);
+        }
+        else{
             masterMastermind.resolve(partie);
         }
 	}
@@ -101,8 +105,14 @@ public class Jeu {
 		if(partie.getModeDePartie().equals(ModeDePartie.PLUS_CHAL)){
             joueurPlus.propositionOrdinateur(partie);
         }
-		else {
-		    joueurMastermind.propositionOrdinateur(partie);
+		else if(partie.getModeDePartie().equals(ModeDePartie.PLUS_DEF)) {
+		    joueurPlus.propositionOrdinateur(partie);
+        }
+        else if(partie.getModeDePartie().equals(ModeDePartie.MAST_DEF)) {
+            joueurMastermind.propositionOrdinateur(partie);
+        }
+        else{
+            joueurMastermind.propositionOrdinateur(partie);
         }
 	}
 

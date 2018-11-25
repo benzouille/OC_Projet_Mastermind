@@ -25,7 +25,7 @@ import fr.lazarus.model.ModeDeJeu;
 import fr.lazarus.model.Partie;
 import fr.lazarus.observer.Observateur;
 import fr.lazarus.view.game.PanelJeu;
-import fr.lazarus.view.game.plusMoins.PopUpCombi;
+import fr.lazarus.view.game.plusMoins.PopUpCombiPlus;
 
 
 /**
@@ -52,7 +52,7 @@ public class MainFrame extends JFrame implements Observateur {
 
     //-- Le Pop up pour choisir la combinaison
     @SuppressWarnings("unused")
-    private PopUpCombi popUpCombi;
+    private PopUpCombiPlus popUpCombiPlus;
     //-- Les différents objets de notre IHM
     private JMenuBar bar = new JMenuBar();
     private JMenu fichier = new JMenu("Fichier"), nouveauJeu = new JMenu("Nouveau");
@@ -242,14 +242,14 @@ public class MainFrame extends JFrame implements Observateur {
         if(partie.getNom() == jeu.getPartie1().getNom()) {
             System.out.println("methode update partie1 de TestSwitchPanel");
             jeu.setPartie1(partie);
-            if(jeu.getModeDeJeu() == ModeDeJeu.PLUS_DUEL && panelJeu != null) {
+            if(jeu.getModeDeJeu() == ModeDeJeu.PLUS_DUEL || jeu.getModeDeJeu() == ModeDeJeu.MAST_DUEL && panelJeu != null) {
                 panelJeu.defTurn();
             }
         }
         else {
             System.out.println("methode update partie2 de TestSwitchPanel");
             jeu.setPartie2(partie);
-            if(jeu.getModeDeJeu() == ModeDeJeu.PLUS_DUEL && panelJeu != null) {
+            if(jeu.getModeDeJeu() == ModeDeJeu.PLUS_DUEL || jeu.getModeDeJeu() == ModeDeJeu.MAST_DUEL && panelJeu != null) {
                 panelJeu.chalTurn();
             }
         }

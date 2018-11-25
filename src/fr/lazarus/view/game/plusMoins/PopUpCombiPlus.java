@@ -26,7 +26,7 @@ import fr.lazarus.observer.Observable;
 import fr.lazarus.observer.Observateur;
 
 
-public class PopUpCombi extends JDialog implements Observable {
+public class PopUpCombiPlus extends JDialog implements Observable {
 
 	/**
 	 * 
@@ -46,7 +46,7 @@ public class PopUpCombi extends JDialog implements Observable {
 	private String solution;
 
 
-	public PopUpCombi(JFrame parent, String title, boolean modal, Configuration config, Partie partie, Observateur obs) {
+	public PopUpCombiPlus(JFrame parent, String title, boolean modal, Configuration config, Partie partie, Observateur obs) {
 		super(parent, title, modal);
 		this.config =config;
 		this.partie = partie;
@@ -110,7 +110,7 @@ public class PopUpCombi extends JDialog implements Observable {
 		String comb = jfCombi.getText();
 		
 		if (comb.length() != nbreChiffre) {
-			JOptionPane.showMessageDialog(null, "Erreur ! \n Veuillez entrer une combinaison à "+ nbreChiffre +".", "ERREUR", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Erreur ! \n Veuillez entrer une combinaison à "+ nbreChiffre +" chiffres.", "ERREUR", JOptionPane.ERROR_MESSAGE);
 			isOkData = false;
 			jfCombi.setText("");
 		}
