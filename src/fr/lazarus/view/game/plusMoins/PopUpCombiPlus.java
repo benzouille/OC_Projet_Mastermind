@@ -25,7 +25,9 @@ import fr.lazarus.model.Partie;
 import fr.lazarus.observer.Observable;
 import fr.lazarus.observer.Observateur;
 
-
+/**
+ * JDialog Permetant de choisir la solution dans le mode defenseur
+ */
 public class PopUpCombiPlus extends JDialog implements Observable {
 
 	/**
@@ -35,17 +37,25 @@ public class PopUpCombiPlus extends JDialog implements Observable {
 	//-- Les logs
 	private static final Logger logger = LogManager.getLogger();
 
-	protected ArrayList<Observateur> listObservateur = new ArrayList<Observateur>();
+	protected ArrayList<Observateur> listObservateur = new ArrayList<>();
 	private JPanel content;
 	private JLabel jlCombi;
 	private Configuration config;
 	private Partie partie;
 	private JTextField jfCombi;
 	private boolean isOkData;
-	private int nbreChiffre, combi;
+	private int nbreChiffre;
 	private String solution;
 
-
+	/**
+	 * Constructeur utilisant les bean Partie et Configuration
+	 * @param parent JFrame
+	 * @param title String
+	 * @param modal boolean
+	 * @param config Configuration
+	 * @param partie Partie
+	 * @param obs Observateur
+	 */
 	public PopUpCombiPlus(JFrame parent, String title, boolean modal, Configuration config, Partie partie, Observateur obs) {
 		super(parent, title, modal);
 		this.config =config;
@@ -60,7 +70,10 @@ public class PopUpCombiPlus extends JDialog implements Observable {
 		this.setVisible(true);
 	}
 
-	public void initComponent() {
+	/**
+	 * Intitiation du contenu du Panel
+	 */
+    private void initComponent() {
 
 		//Choix de la combinaison
 		jlCombi = new JLabel("Choisissez votre code à " + nbreChiffre + " chiffres :");
@@ -104,6 +117,9 @@ public class PopUpCombiPlus extends JDialog implements Observable {
 		this.getContentPane().add(control, BorderLayout.SOUTH);
 	}
 
+    /**
+     * Verifie l'integrité des données
+     */
 	private void acurateData() {
 
 		isOkData = true;
@@ -114,19 +130,20 @@ public class PopUpCombiPlus extends JDialog implements Observable {
 			isOkData = false;
 			jfCombi.setText("");
 		}
-		else if (comb.matches("[0-9]*") == false) {
+		else if (!comb.matches("[0-9]*")) {
 			JOptionPane.showMessageDialog(null, "Erreur ! \n Veuillez n'entrer que des chiffres.", "ERREUR", JOptionPane.ERROR_MESSAGE);
 			isOkData = false;
 			jfCombi.setText("");
 		}
 		else {
 			solution = comb;
-			logger.debug("la combinaison : "+combi);
 			isOkData = true;
 		}
 	}
 
-
+    /**
+     * NestedClass du bouton "ok"
+     */
 	class RunListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			acurateData();
@@ -136,26 +153,20 @@ public class PopUpCombiPlus extends JDialog implements Observable {
 				partie.setSolution(solution);
 				updateObservateur();
 			}
-			logger.debug("cliqué sur ok ");
+			logger.info("Solution : " + solution);
 		}
-
 	}
 
+    /**
+     * NestedClass du bouton "random", permet de choisir une combinaison aléatoire
+     */
 	class RandomListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			logger.info("cliqué sur random ");
 			jfCombi.setText(partie.random(nbreChiffre));
 		}
 	}
-	
-	public String convertTabIntToString(int [] tab) {
-		String str= "";
-		for(int i = 0; i<tab.length; i++) {
-			str += Integer.toString(tab[i]);
-		}
-		return str;
-		
-	}
+
 
 	public void addObservateur(Observateur obs) {
 		listObservateur.add(obs);	

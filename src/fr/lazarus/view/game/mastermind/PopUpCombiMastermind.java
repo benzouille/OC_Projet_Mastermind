@@ -1,13 +1,11 @@
 package fr.lazarus.view.game.mastermind;
 
 import fr.lazarus.model.Configuration;
-import fr.lazarus.model.ModeDePartie;
 import fr.lazarus.model.Partie;
 import fr.lazarus.model.mastermind.Balle;
 import fr.lazarus.model.mastermind.TypeCouleur;
 import fr.lazarus.observer.Observable;
 import fr.lazarus.observer.Observateur;
-import fr.lazarus.view.game.plusMoins.PopUpCombiPlus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -19,6 +17,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
+/**
+ * JDialog Permetant de choisir la solution dans le mode defenseur
+ */
 public class PopUpCombiMastermind extends JDialog implements Observable {
 
     /**
@@ -51,9 +52,18 @@ public class PopUpCombiMastermind extends JDialog implements Observable {
     private Configuration config;
     private Partie partie;
     private boolean isOkData;
-    private int nbreChiffre, combi;
+    private int nbreChiffre;
     private String solution, strProposition;
 
+    /**
+     * Constructeur utilisant les bean Partie et Configuration
+     * @param parent JFrame
+     * @param title String
+     * @param modal boolean
+     * @param config Configuration
+     * @param partie Partie
+     * @param obs Observateur
+     */
     public PopUpCombiMastermind(JFrame parent, String title, boolean modal, Configuration config, Partie partie, Observateur obs) {
         super(parent, title, modal);
         this.config =config;
@@ -68,7 +78,10 @@ public class PopUpCombiMastermind extends JDialog implements Observable {
         setVisible(true);
     }
 
-    public void initComponent() {
+    /**
+     * Intitiation du contenu du Panel
+     */
+    private void initComponent() {
 
         //Choix de la combinaison
         jlCombi = new JLabel("Choisissez votre code à " + nbreChiffre + " balles :");
@@ -130,10 +143,12 @@ public class PopUpCombiMastermind extends JDialog implements Observable {
         this.getContentPane().add(control, BorderLayout.SOUTH);
     }
 
+    /**
+     * Verifie l'integrité des données
+     */
     private void acurateData() {
 
         isOkData = true;
-        String comb = jlCombi.getText();
 
         if (strProposition.length() != nbreChiffre) {
             JOptionPane.showMessageDialog(null, "Erreur ! \n Veuillez entrer une combinaison à "+ nbreChiffre +" balles.", "ERREUR", JOptionPane.ERROR_MESSAGE);
@@ -144,12 +159,12 @@ public class PopUpCombiMastermind extends JDialog implements Observable {
         }
         else {
             solution = strProposition;
-            logger.debug("la combinaison : "+combi);
-            isOkData = true;
         }
     }
 
-
+    /**
+     * NestedClass du bouton "ok"
+     */
     class RunListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             acurateData();
@@ -158,13 +173,15 @@ public class PopUpCombiMastermind extends JDialog implements Observable {
                 setVisible(false);
                 partie.setSolution(solution);
                 updateObservateur();
-                logger.trace("", solution);
             }
 
         }
 
     }
 
+    /**
+     * NestedClass du bouton "random", permet de choisir une combinaison aléatoire
+     */
     class RandomListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             jpCombi.removeAll();
@@ -179,7 +196,7 @@ public class PopUpCombiMastermind extends JDialog implements Observable {
      * @param str String à convertir
      * @param jPanel panel dans lequel y ajouter les images
      */
-    public void stringToImage(String str, JPanel jPanel){
+    private void stringToImage(String str, JPanel jPanel){
         for(int i = 0; i<str.length(); i++){
             JLabel jLabel = new JLabel(balles[Character.getNumericValue(str.charAt(i))].getImageIconMoy());
             jPanel.add(jLabel);
@@ -187,15 +204,10 @@ public class PopUpCombiMastermind extends JDialog implements Observable {
         jPanel.revalidate();
     }
 
-    public String convertTabIntToString(int [] tab) {
-        String str= "";
-        for(int i = 0; i<tab.length; i++) {
-            str += Integer.toString(tab[i]);
-        }
-        return str;
-
-    }
-
+    /**
+     * Bouton Cliquable utilisant les objets Balle
+     * @param <PopUpCombiMastermind>
+     */
     class CouleurListener<PopUpCombiMastermind> implements MouseListener {
         private Balle balle;
         private JLabel jLabel;
@@ -231,7 +243,6 @@ public class PopUpCombiMastermind extends JDialog implements Observable {
             }
             else {
                 strProposition += balle.getTypeCouleur().getValeur();
-                System.out.println(strProposition);
                 JLabel jLabel = new JLabel(balle.getImageIconMoy());
                 jpCombi.add(jLabel);
             }
@@ -247,6 +258,7 @@ public class PopUpCombiMastermind extends JDialog implements Observable {
         for(Observateur obs : listObservateur) {
             obs.update(partie);
         }
+        logger.info(partie.toString());
     }
 
     public void delObservateur() {}

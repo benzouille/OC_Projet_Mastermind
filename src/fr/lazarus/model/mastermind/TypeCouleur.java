@@ -18,10 +18,12 @@ public enum TypeCouleur {
      * @param valeur int
      * @param nom String
      */
-	private TypeCouleur(int valeur, String nom) {
+	TypeCouleur(int valeur, String nom) {
 		this.valeur = valeur;
 		this.nom = nom;
 	}
+
+	//GETTER
 
 	public int getValeur() {return this.valeur;}
 	

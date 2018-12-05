@@ -10,10 +10,12 @@ import fr.lazarus.model.mastermind.TypeCouleur;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
 
+/**
+ * Panel de jeu du Mastermind
+ */
 public class GamePanelMastermind  extends JPanel {
 
     private Configuration config;
@@ -41,6 +43,8 @@ public class GamePanelMastermind  extends JPanel {
 
     private Balle balles[] = {bleu, brun, cyan, jaune, orange, rose, rouge, vert, vertClair, violet, noir, blanc};
 
+    private Balle ballesIndice[] = {noir, blanc};
+
     private JPanel jpSouth, jpGauche, jpGaucheHaut, jpGaucheBas, jpCentre, jpCentreHaut, jpCentreBas, jpDroit, jpDroitHaut, jpDroitBas, jpSolution, jpProposition;
     private JLabel jlTitreSolution, jlTitreProposition, jlTitreIndice;
     private JButton okButton, cancelButton;
@@ -54,15 +58,21 @@ public class GamePanelMastermind  extends JPanel {
 
     private String strProposition = "";
 
+    private int nbreBalle;
+
     private boolean devMode;
     private boolean dataIsOk;
+    private boolean boutonActif = true;
 
     /**
      * Constructeur
+     * @param config
+     * @param modeDeJeu
+     * @param partie
+     * @param controller
      */
     public GamePanelMastermind(Configuration config, ModeDeJeu modeDeJeu, Partie partie, Controller controller) {
         this.partie = partie;
-        //partie.setTour(1);
         this.modeDeJeu = modeDeJeu;
         this.config = config;
         this.controller = controller;
@@ -111,9 +121,8 @@ public class GamePanelMastermind  extends JPanel {
      */
     public void initPanelEast() {
         jpRight.setPreferredSize(new Dimension(125, 700));
-        jpRight.setBorder(BorderFactory.createLineBorder(Color.MAGENTA));
 
-        int nbreBalle = config.getCouleurMast();
+        nbreBalle = config.getCouleurMast();
         int i = 0;
         if(partie.getModeDePartie().equals(ModeDePartie.MAST_DEF)) {
             nbreBalle = balles.length;
@@ -144,11 +153,9 @@ public class GamePanelMastermind  extends JPanel {
 
     private void initPanelGauche() {
         jpGauche = new JPanel();
-        jpGauche.setBorder(BorderFactory.createLineBorder(Color.YELLOW));
         jpGauche.setPreferredSize(new Dimension(125, 150));
 
         jpGaucheHaut = new JPanel();
-        jpGaucheHaut.setBorder(BorderFactory.createLineBorder(Color.RED));
         jpGaucheHaut.setPreferredSize(new Dimension(125, 75));
 
         jlTitreProposition = new JLabel("Proposition");
@@ -167,13 +174,12 @@ public class GamePanelMastermind  extends JPanel {
         }
 
         jpGaucheBas = new JPanel();
-        jpGaucheBas.setBorder(BorderFactory.createLineBorder(Color.GREEN));
         jpGaucheBas.setPreferredSize(new Dimension(125, 75));
 
         jlTitreSolution = new JLabel("Solution");
         jlTitreSolution.setFont(font);
 
-        if (partie.getModeDePartie() == ModeDePartie.PLUS_DEF || devMode == true) {
+        if (partie.getModeDePartie() == ModeDePartie.MAST_DEF || devMode) {
             jpGaucheBas.add(jlTitreSolution);
             jpGaucheBas.setVisible(true);
         }
@@ -189,12 +195,10 @@ public class GamePanelMastermind  extends JPanel {
 
         jpCentre = new JPanel();
         jpCentre.setLayout(new BorderLayout());
-        jpCentre.setBorder(BorderFactory.createLineBorder(Color.GREEN));
         jpCentre.setPreferredSize(new Dimension(300, 150));
 
         jpCentreHaut = new JPanel();
         jpCentreHaut.setPreferredSize(new Dimension(350, 75));
-        jpCentreHaut.setBorder(BorderFactory.createLineBorder(Color.CYAN));
 
         jpProposition = new JPanel();
         jpProposition.setBackground(Color.white);
@@ -208,7 +212,6 @@ public class GamePanelMastermind  extends JPanel {
 
         jpCentreBas = new JPanel();
         jpCentreBas.setPreferredSize(new Dimension(350, 75));
-        jpCentreBas.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
         jpSolution = new JPanel();
         centerGamePanel.stringToImage(partie.getSolution(), jpSolution, balles);
         jpSolution.setFont(font);
@@ -216,7 +219,7 @@ public class GamePanelMastermind  extends JPanel {
         jpSolution.setPreferredSize(new Dimension(380, 70));
         jpCentreBas.add(jpSolution);
         jpCentreBas.setVisible(devMode);
-        if (partie.getModeDePartie() == ModeDePartie.PLUS_DEF) {
+        if (partie.getModeDePartie() == ModeDePartie.MAST_DEF) {
             jpCentreBas.setVisible(true);
         }
 
@@ -229,12 +232,10 @@ public class GamePanelMastermind  extends JPanel {
     private void initPanelDroit() {
 
         jpDroit = new JPanel();
-        jpDroit.setBorder(BorderFactory.createLineBorder(Color.RED));
         jpDroit.setPreferredSize(new Dimension(125, 150));
 
         jpDroitHaut = new JPanel();
         jpDroitHaut.setPreferredSize(new Dimension(125, 75));
-        jpDroitHaut.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
         okButton = new JButton("Ok");
         okButton.setPreferredSize(new Dimension(125, 70));
         okButton.setHorizontalAlignment(JButton.CENTER);
@@ -244,7 +245,6 @@ public class GamePanelMastermind  extends JPanel {
 
         jpDroitBas = new JPanel();
         jpDroitBas.setPreferredSize(new Dimension(125, 75));
-        jpDroitBas.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
         cancelButton = new JButton("Annuler");
         cancelButton.setPreferredSize(new Dimension(125, 70));
         cancelButton.setHorizontalAlignment(JButton.CENTER);
@@ -261,30 +261,44 @@ public class GamePanelMastermind  extends JPanel {
 
     }
 
+    /**
+     * Methode permettant avec le mode dev activé de mettre directement l'indice dans le JPanel
+     */
     public void devIndice() {
-        //TODO modifier pour y inserer les image des balle directement, peut etre avec un stringToBall()
-        //jtfProposition.setText(partie.getIndice());
-
+        strProposition = partie.getIndice();
+        for(int  i =0; i < strProposition.length(); i++) {
+            if (strProposition.charAt(i) == '0') {
+                JLabel jLabel = new JLabel(noir.getImageIconMoy());
+                jpProposition.add(jLabel);
+            } else {
+                JLabel jLabel = new JLabel(blanc.getImageIconMoy());
+                jpProposition.add(jLabel);
+            }
+        }
     }
 
+    /**
+     * Methode pour activer le Panel dans le mode duel
+     */
     public void newTurn() {
         this.setBorder(BorderFactory.createLineBorder(Color.GREEN, 15, true));
-        //TODO desactiver le panel droit
         okButton.setEnabled(true);
+        boutonActif = true;
         this.revalidate();
     }
 
+    /**
+     * Methode pour désactiver le Panel dans le mode duel
+     */
     public void stopTurn() {
         this.setBorder(BorderFactory.createLineBorder(Color.RED, 15, true));
-        //TODO activer le panel droit
         okButton.setEnabled(false);
+        boutonActif = false;
         this.revalidate();
     }
 
     public void okMastChal() {
-        System.out.println("okPlusChal() de GamePanelMast");
 
-        System.out.println("resultat de isOkProposition : "+ isOkProposition(strProposition) + "longueur de la prop : "+strProposition.length()+ " longueur de la config :"+config.getCombiMast());
         if (isOkProposition(strProposition)) {
             partie.setProposition(strProposition);
             partie.setActif(false);
@@ -300,18 +314,30 @@ public class GamePanelMastermind  extends JPanel {
     }
 
     public void okMastDef() {
-        System.out.println("okPlusDef() de GamePanelMast");
         if(isOkIndice(strProposition)){
+            jpProposition.removeAll();
             partie.setIndice(strProposition);
             partie.setActif(false);
             controller.sendIndice(partie);
             centerGamePanel.addDataLine(partie);
-            if(config.isDevModEnJeu() == true && partie.getModeDePartie() == ModeDePartie.MAST_DEF) {
-                //controller.sendProposition(partie);
-                //TODO ici c'est pour le mode dev mettre l'indice transformé en image dans le jfProposition
-                //jtfProposition.setText(partie.getIndice());
+            if(config.isDevModEnJeu() && partie.getModeDePartie() == ModeDePartie.MAST_DEF) {
+                controller.sendProposition(partie);
+                strProposition = partie.getIndice();
+                for(int  i =0; i < strProposition.length(); i++){
+                    if(strProposition.charAt(i) == '0'){
+                        JLabel jLabel = new JLabel(noir.getImageIconMoy());
+                        jpProposition.add(jLabel);
+                    }
+                    else{
+                        JLabel jLabel = new JLabel(blanc.getImageIconMoy());
+                        jpProposition.add(jLabel);
+                    }
+                    jpProposition.repaint();
+                    jpProposition.revalidate();
+                }
             }
             else {
+                strProposition = "";
                 jpProposition.removeAll();
                 jpProposition.repaint();
                 jpProposition.revalidate();
@@ -319,8 +345,6 @@ public class GamePanelMastermind  extends JPanel {
             if(modeDeJeu == ModeDeJeu.MAST_DUEL) {
                 stopTurn();
             }
-            strProposition = "";
-            jpProposition.removeAll();
             jpProposition.repaint();
             jpProposition.revalidate();
             this.revalidate();
@@ -328,7 +352,6 @@ public class GamePanelMastermind  extends JPanel {
     }
 
     public boolean isOkIndice(String indice) {
-        //TODO verifier que l'indice ne dépasse pas la taille du config.getCombiMast();
         dataIsOk = true;
         if (indice.length() > config.getCombiMast()) {
             JOptionPane.showMessageDialog(null, "Erreur ! \n Veuillez entrer une longueur d'indice plus petite que "+ config.getCombiMast() +".", "ERREUR", JOptionPane.ERROR_MESSAGE);
@@ -367,8 +390,6 @@ public class GamePanelMastermind  extends JPanel {
             else if (partie.getModeDePartie() == ModeDePartie.MAST_DEF) {
                 okMastDef();
             }
-            else {
-            }
         }
     }
 
@@ -378,11 +399,13 @@ public class GamePanelMastermind  extends JPanel {
             jpProposition.removeAll();
             jpProposition.repaint();
             jpProposition.revalidate();
-            System.out.println("bouton cancel");
         }
     }
 
-
+    /**
+     * Bouton Cliquable utilisant les objets Balle
+     * @param <GamePanelMastermind>
+     */
     class CouleurListener<GamePanelMastermind> implements MouseListener {
         private Balle balle;
         private JLabel jLabel;
@@ -408,33 +431,31 @@ public class GamePanelMastermind  extends JPanel {
         public void mouseExited(MouseEvent e) {}
 
         public void mousePressed(MouseEvent e) {
-            smallSize();
+            if (boutonActif) {
+                smallSize();
+            }
         }
 
         public void mouseReleased(MouseEvent e) {
-            bigSize();
-            if (jpProposition.getComponentCount()+1 > config.getCombiMast()){
-                JOptionPane.showMessageDialog(null, "Erreur ! \n Vous avez atteint le nombre maximal de balles.", "ERREUR", JOptionPane.ERROR_MESSAGE);
-            }
-            else {
-                int chiffre = balle.getTypeCouleur().getValeur();
-                if (chiffre == 10) {
-                    chiffre = 0;
-                } else if (chiffre == 11) {
-                    chiffre = 1;
+                bigSize();
+            if (boutonActif) {
+                if (jpProposition.getComponentCount() + 1 > config.getCombiMast()) {
+                    JOptionPane.showMessageDialog(null, "Erreur ! \n Vous avez atteint le nombre maximal de balles.", "ERREUR", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    int chiffre = balle.getTypeCouleur().getValeur();
+                    if (chiffre == 10) {
+                        chiffre = 0;
+                    } else if (chiffre == 11) {
+                        chiffre = 1;
+                    }
+                    strProposition += chiffre;
+                    JLabel jLabel = new JLabel(balle.getImageIconMoy());
+                    jpProposition.add(jLabel);
                 }
-                System.out.println(chiffre);
-                strProposition += chiffre;
-                System.out.println(strProposition);
-                JLabel jLabel = new JLabel(balle.getImageIconMoy());
-                jpProposition.add(jLabel);
+                jpProposition.revalidate();
             }
-            jpProposition.revalidate();
         }
     }
-
-    public JLabel[] getLabel() {return label;}
-    public void setLabel(JLabel[] label) {this.label = label;}
 
     class EnterListener implements KeyListener {
 

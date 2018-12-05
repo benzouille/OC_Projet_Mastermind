@@ -12,6 +12,9 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 
+/**
+ * Classe du model du mastermind qui renvoie une proposition en fonction de l'indice reçu du Bean Partie
+ */
 public class JoueurMastermind implements ModelJoueur, Observable {
 
     //-- Les logs
@@ -36,11 +39,17 @@ public class JoueurMastermind implements ModelJoueur, Observable {
     private ArrayList<Integer> solution = new ArrayList<>();
     private ArrayList<Integer> indice = new ArrayList<>();
 
-	public JoueurMastermind(Configuration config, Partie partie, Observateur obs){
-	    this.config = config;
-	    this.partie = partie;
-	    this.obs = obs;
-	    this.addObservateur(obs);
+    /**
+     * Constructeur, recupere les parametres et initialise la classe
+     * @param config
+     * @param partie
+     * @param obs
+     */
+    public JoueurMastermind(Configuration config, Partie partie, Observateur obs){
+        this.config = config;
+        this.partie = partie;
+        this.obs = obs;
+        this.addObservateur(obs);
         initOrdinateur(partie);
 
         //ajout des couleurs dans l'arraylist couleur.
@@ -57,7 +66,7 @@ public class JoueurMastermind implements ModelJoueur, Observable {
     /**
      * Au début d'une partie lance la première proposition de l'ordinateur.
      */
-	public void initOrdinateur(Partie partie) {
+    public void initOrdinateur(Partie partie) {
         if (partie.getIndice().equals("vide")) {
             String proposition = "";
             for (int i = 0; i<config.getCombiMast(); i++) {
@@ -66,10 +75,14 @@ public class JoueurMastermind implements ModelJoueur, Observable {
             derniereAction = "monoChrome";
             this.partie.setProposition(proposition);
         }
-	}
+    }
 
-	@Override
-	public String propositionOrdinateur(Partie partie) {
+    /**
+     * Renvoie une proposition dans le Bean Partie en fonction de l'indice extrait du Bean.
+     * @param partie Partie
+     * @return
+     */
+    public String propositionOrdinateur(Partie partie) {
 
 	    /*
 	    --stringToList(indices) pour convertir un string en arrayList.
@@ -86,6 +99,11 @@ public class JoueurMastermind implements ModelJoueur, Observable {
         noirIgnore(nbreVerrou());
         lecteurIndice();
 
+        /* verifie que les conditions de victoire soient bien réunis */
+        if(partie.getModeDePartie() == ModeDePartie.MAST_DEF) {
+            endGame();
+        }
+
         /* Formattage de la proposition */
         for (int i = 0; i<config.getCombiMast(); i++) {
             proposition.set(i, -1);
@@ -98,31 +116,16 @@ public class JoueurMastermind implements ModelJoueur, Observable {
          ********************************
          */
 
-        /* verifie que les conditions de victoire soient bien réunis */
-        if(partie.getModeDePartie() == ModeDePartie.MAST_DEF) {
-            endGame();
-        }
-
-        /*if(victoire){
-            tour++;
-            //TODO ajout de quoi faire en cas de victoire.
-            String str = "Victoire";
-            System.out.println(str);
-            return str;
-        }*/
-
         /* verifie si l'indice modifié par noirIgnore() est vide */
         if(nbreBlanc == 0 && nbreNoir == 0) {
             aLaPoubelle(0);
             monoChrome(couleur.get(0));
 
             /* On ajoute un tour et on retourne la proposition en un string */
-            logger.debug(" nouvelle proposition et l'intervale Max et min", listToString(proposition));
             this.partie.setProposition(listToString(proposition));
             if(partie.getModeDePartie() == ModeDePartie.MAST_DEF) {
                 this.partie.addTour();
             }
-            System.out.println("propositionOrdinateur() de JoueurMast");
             updateObservateur();
             return listToString(proposition);
         }
@@ -141,12 +144,10 @@ public class JoueurMastermind implements ModelJoueur, Observable {
                 biChrome(couleur.get(0),positionCouleur1,couleur.get(1));
                 ajoutCouleur(nbreNoir-1, couleur.get(0));
             }
-            logger.debug(" nouvelle proposition et l'intervale Max et min", listToString(proposition));
             this.partie.setProposition(listToString(proposition));
             if(partie.getModeDePartie() == ModeDePartie.MAST_DEF) {
                 this.partie.addTour();
             }
-            System.out.println("propositionOrdinateur() de JoueurMast");
             updateObservateur();
             return listToString(proposition);
         }
@@ -174,12 +175,10 @@ public class JoueurMastermind implements ModelJoueur, Observable {
                 positionCouleur1 = 0;
                 biChrome(couleur.get(0),positionCouleur1,couleur.get(1));
             }
-            logger.debug(" nouvelle proposition et l'intervale Max et min", listToString(proposition));
             this.partie.setProposition(listToString(proposition));
             if(partie.getModeDePartie() == ModeDePartie.MAST_DEF) {
                 this.partie.addTour();
             }
-            System.out.println("propositionOrdinateur() de JoueurMast");
             updateObservateur();
             return listToString(proposition);
         }
@@ -188,7 +187,7 @@ public class JoueurMastermind implements ModelJoueur, Observable {
             /* Si 1 blanc */
             if (nbreBlanc == 1) {
                 //couleur bonne, position mauvaise -> bichrome position +1, et couleur2 poubelle, biChrome()
-
+                //peux être amélioré
                 aLaPoubelle(1);
                 positionCouleur1++;
                 biChrome(couleur.get(0),positionCouleur1,couleur.get(1));
@@ -200,21 +199,24 @@ public class JoueurMastermind implements ModelJoueur, Observable {
                 ajoutAuVerrou(positionCouleur1, couleur.get(1));
                 verrouille();
                 aLaPoubelle(1);
-                biChrome(couleur.get(0), positionCouleur1, couleur.get(1));
+                if(tailleIndice != config.getCombiMast()) {
+                    biChrome(couleur.get(0), positionCouleur1, couleur.get(1));
+                }
+                else{
+                    monoChrome(couleur.get(0));
+                }
             }
-            logger.debug(" nouvelle proposition et l'intervale Max et min", listToString(proposition));
             this.partie.setProposition(listToString(proposition));
             if(partie.getModeDePartie() == ModeDePartie.MAST_DEF) {
                 this.partie.addTour();
             }
-            System.out.println("propositionOrdinateur() de JoueurMast");
+
             updateObservateur();
             return listToString(proposition);
         }
 
         if (nbreNoir == 1 || nbreBlanc == 1){
             //rien a la poubelle couleur 1 présente à la mauvaise place couleur 2 présente, positionCouleur++ faire un biChrome avec les deux meme couleurs
-
             positionCouleur1++;
             biChrome(couleur.get(0), positionCouleur1, couleur.get(1));
 
@@ -225,15 +227,14 @@ public class JoueurMastermind implements ModelJoueur, Observable {
             biChrome(couleur.get(0), positionCouleur1, couleur.get(1));
         }
 
-        logger.debug(" nouvelle proposition et l'intervale Max et min", listToString(proposition));
         this.partie.setProposition(listToString(proposition));
+
         if(partie.getModeDePartie() == ModeDePartie.MAST_DEF) {
             this.partie.addTour();
         }
-        System.out.println("propositionOrdinateur() de JoueurMast");
         updateObservateur();
         return listToString(proposition);
-	}
+    }
 
     /**
      * Methode dénombrant le nombre d'indice noir(int = 1) et le nombre d'indice blanc(int = 2) contenu dans l'ArrayList.
@@ -243,7 +244,7 @@ public class JoueurMastermind implements ModelJoueur, Observable {
         nbreNoir = 0;
 
         for(int i = 0; i<indice.size(); i++) {
-            if (indice.get(i).equals(1)) {
+            if (indice.get(i).equals(0)) {
                 nbreNoir++;
             } else {
                 nbreBlanc++;
@@ -259,9 +260,6 @@ public class JoueurMastermind implements ModelJoueur, Observable {
     private void aLaPoubelle(int indexColor){
         poubelle.add(couleur.get(indexColor));
         couleur.remove(indexColor);
-
-        System.out.println("couleur : "+couleur);
-        System.out.println("poubelle : "+poubelle);
     }
 
     /**
@@ -301,7 +299,8 @@ public class JoueurMastermind implements ModelJoueur, Observable {
         int a = positionCouleur1;
         int ajout =0;
         while(verrou.get(a++) != valeurDefaut){ ajout++; }
-        proposition.set(positionCouleur1+ajout, couleur1);
+        positionCouleur1 += ajout;
+        proposition.set(positionCouleur1, couleur1);
         monoChrome(couleur2);
         derniereAction = "biChrome";
     }
@@ -314,7 +313,6 @@ public class JoueurMastermind implements ModelJoueur, Observable {
     private void ajoutAuVerrou(int index, int chiffre) {
         int a = index;
         int ajout =0;
-        //TODO verifier risque de problème avec un écrasement dans le verrou sur un verrou déjà crée.
         while(verrou.get(a++) != -1){ ajout++; }
         verrou.set(index+ajout, chiffre);
     }
@@ -326,7 +324,6 @@ public class JoueurMastermind implements ModelJoueur, Observable {
     private void verrouille() {
         for(int i = 0; i < config.getCombiMast() ; i++) {
             if (verrou.get(i) != valeurDefaut) {
-                System.out.println("le verrou : " + getVerrou());
                 proposition.set(i, verrou.get(i));
             }
         }
@@ -350,19 +347,20 @@ public class JoueurMastermind implements ModelJoueur, Observable {
      */
     private void noirIgnore(int nombre) {
         for(int i = 0 ; i < nombre; i++) {
-            indice.remove(indice.lastIndexOf(1));
+            indice.remove(indice.lastIndexOf(0));
         }
-        System.out.println("indice = " + indice);
     }
 
 
-	@Override
-	public Partie endGame() {
-        //TODO Bordel à revoir
+    /**
+     * Verifie si l'objet partie correspond aux conditions de victoire ou défaite
+     * @return partie
+     */
+    public Partie endGame() {
         boolean b = false;
         if (partie.getIndice().length() == config.getCombiMast()) {
             for (int i = 0; i < config.getCombiMast(); i++) {
-                if (Character.getNumericValue(partie.getIndice().charAt(i)) == 1) {
+                if (Character.getNumericValue(partie.getIndice().charAt(i)) == 0) {
                     b = true;
                 } else {
                     b = false;
@@ -370,19 +368,20 @@ public class JoueurMastermind implements ModelJoueur, Observable {
                 }
             }
         }
-             if(b){
+        if(b){
             partie.setEnCours(false);
             @SuppressWarnings("unused")
-            PopUpFinPartie pufp = new PopUpFinPartie(null, "Gagné", true, partie, obs);
+            PopUpFinPartie pufp = new PopUpFinPartie(null, "Perdu", true, partie, obs);
+            logger.info("Perdu");
         }
         else {
             if(partie.getTour() == config.getTourMast()) {
                 partie.setEnCours(false);
                 @SuppressWarnings("unused")
-                PopUpFinPartie pufp = new PopUpFinPartie(null, "Perdu", true, partie, obs);
+                PopUpFinPartie pufp = new PopUpFinPartie(null, "Gagné", true, partie, obs);
+                logger.info("Gagné");
             }
         }
-        System.out.println("endGame() de JoueurPlus");
         updateObservateur();
         return partie;
     }
@@ -420,28 +419,17 @@ public class JoueurMastermind implements ModelJoueur, Observable {
     public String getProposition() {return listToString(proposition);}
     public void setProposition(String proposition) {this.proposition = stringToList(proposition);}
 
-    public String getIndices() {return indices;}
-    public void setIndices(String indices) {this.indices = indices;}
-
     public int getTour() { return tour; }
     public void setTour(int tour) { this.tour = tour; }
 
-    public ArrayList<Integer> getVerrou() { return verrou; }
-    public void setVerrou(ArrayList<Integer> verrou) { this.verrou = verrou; }
-
-    @Override
-    public void addObservateur(Observateur obs) {
-
-    }
+    public void addObservateur(Observateur obs) { listObservateur.add(obs); }
 
     public void updateObservateur() {
-        for(Observateur obs : listObservateur)
+        for(Observateur obs : listObservateur) {
             obs.update(partie);
-        System.out.println("updateObservateur() de Joueur");
+        }
+        logger.info(partie.toString());
     }
 
-    @Override
-    public void delObservateur() {
-
-    }
+    public void delObservateur() { }
 }

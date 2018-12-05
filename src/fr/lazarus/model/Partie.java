@@ -5,7 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * Java Bean contenant tout ce qui est nécessaire pour jouer une aux jeux.
+ * Java Bean contenant toute les informations nécessaires pour jouer aux jeux.
  * @author Ben
  *
  */
@@ -19,6 +19,10 @@ public class Partie {
 	private int tour;
 	private boolean enCours = true, actif = true;
 
+	/**
+	 * Constructeur
+	 * @param nom String
+	 */
 	public Partie(String nom) {
 		this.nom = nom;
 		modeDePartie = null;
@@ -27,7 +31,12 @@ public class Partie {
 		indice = "vide";
 		tour = 0;
 	}
-	
+
+	/**
+	 * Constructeur
+	 * @param nom String
+	 * @param modeDePartie ModeDePartie
+	 */
 	public Partie(String nom, ModeDePartie modeDePartie) {
 		this.nom = nom;
 		this.modeDePartie = modeDePartie;
@@ -37,6 +46,12 @@ public class Partie {
 		tour = 0;
 	}
 
+	/**
+	 * Constructeur
+	 * @param nom String
+	 * @param modeDePartie ModeDePartie
+	 * @param solution String
+	 */
 	public Partie(String nom, ModeDePartie modeDePartie, String solution) {
 		this.nom = nom;
 		this.solution = solution;
@@ -46,8 +61,17 @@ public class Partie {
 		tour = 0;
 	}
 
+    /**
+     * Génère la solution en fonction du nombre de chiffres présent dans nbreChiffre
+     * @param nbreChiffre
+     */
 	public void ordiPartie(int nbreChiffre) { setSolution(random(nbreChiffre)); }
 
+    /**
+     * Génère la solution en fonction du nombre de chiffres présent dans nbreChiffre et les chiffres à utiliser avec nbreCouleur
+     * @param nbreChiffre
+     * @param nbreCouleur
+     */
     public void ordiPartie(int nbreChiffre, int nbreCouleur) { setSolution(random(nbreChiffre, nbreCouleur)); }
 
 	/**
@@ -81,7 +105,7 @@ public class Partie {
 	/**
 	 * Convertit un tableau d'int en string
 	 * @param tab
-	 * @return
+	 * @return str
 	 */
 	private String convertTabIntToString(int [] tab) {
 		String str= "";
@@ -102,10 +126,12 @@ public class Partie {
 	 * Decrit ce que contient le Bean.
 	 */
 	public String toString() {
-		String str = "Partie : [Mode de Partie : " + modeDePartie + ", solution : " + solution + ", proposition : " + proposition + ", indice : " + indice
+		String str = "Partie : [ Nom : "+ nom + ", mode de Partie : " + modeDePartie + ", solution : " + solution + ", proposition : " + proposition + ", indice : " + indice
 				+ ", tour : " + tour + ", enCours : " + enCours + "]";
 		return str;
 	}
+
+	//GETTER SETTER
 	
 	public String getNom() {return nom;}
 	public void setNom(String nom) {this.nom = nom;}

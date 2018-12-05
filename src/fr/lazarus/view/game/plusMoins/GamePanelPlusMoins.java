@@ -224,12 +224,15 @@ public class GamePanelPlusMoins extends JPanel {
 	}
 	
 	/**
-	 * Methode permettant avec le mode dev activé de mettre directement 
+	 * Methode permettant avec le mode dev activé de mettre directement l'indice dans le JTextField
 	 */
 	public void devIndice() {
 		jtfProposition.setText(partie.getIndice());
 	}
 
+	/**
+	 * Methode pour activer le Panel dans le mode duel
+	 */
 	public void newTurn() {
 		this.setBorder(BorderFactory.createLineBorder(Color.GREEN, 15, true));
 		jtfProposition.setEditable(true);
@@ -237,6 +240,9 @@ public class GamePanelPlusMoins extends JPanel {
 		this.revalidate();
 	}
 
+	/**
+	 * Methode pour désactiver le Panel dans le mode duel
+	 */
 	public void stopTurn() {
 		this.setBorder(BorderFactory.createLineBorder(Color.RED, 15, true));
 		jtfProposition.setEditable(false);
@@ -245,7 +251,6 @@ public class GamePanelPlusMoins extends JPanel {
 	}
 
 	public void okPlusChal() {
-		System.out.println("okPlusChal() de GamePanelPlusMoins");
 		String proposition = jtfProposition.getText();
 
 		if (isOkProposition(proposition)) {
@@ -262,14 +267,13 @@ public class GamePanelPlusMoins extends JPanel {
 	}
 
 	public void okPlusDef() {
-		System.out.println("okPlusDef() de GamePanelPlusMoins");
 		String indice = jtfProposition.getText();
 		if(isOkIndice(indice)){
 		partie.setIndice(indice);
 		partie.setActif(false);
 		controller.sendIndice(partie);
 		centerGamePanel.addDataLine(partie);
-		if(config.isDevModEnJeu() == true && partie.getModeDePartie() == ModeDePartie.PLUS_DEF) {
+		if(config.isDevModEnJeu() && partie.getModeDePartie() == ModeDePartie.PLUS_DEF) {
 			controller.sendProposition(partie);
 			jtfProposition.setText(partie.getIndice());
 		}

@@ -71,9 +71,7 @@ public class PanelJeu extends JPanel {
 			if(configuration.isDevModEnJeu() && jeu.getPartie2().getModeDePartie() == ModeDePartie.PLUS_DEF) {
 				controller.sendProposition(jeu.getPartie2());
 				jpDefPlus.devIndice();
-				System.out.println("dans le if");
 			}
-			else {System.out.println("dans le else");}
 			jpDefPlus.setPreferredSize(smallSize);
 
 			this.setLayout(new BorderLayout());
@@ -93,12 +91,10 @@ public class PanelJeu extends JPanel {
 			controller = new Controller(configuration,jeu.getPartie1(), jeu);
 			PopUpCombiMastermind popUpCombiMastermind = new PopUpCombiMastermind(null, "choix de la combinaison", true, configuration, jeu.getPartie1(), obs);
 			jpDefMast = new GamePanelMastermind(configuration, jeu.getModeDeJeu(), jeu.getPartie1(), controller);
-			if(configuration.isDevModEnJeu() && jeu.getPartie1().getModeDePartie() == ModeDePartie.PLUS_DEF) {
+			if(configuration.isDevModEnJeu() && jeu.getPartie1().getModeDePartie() == ModeDePartie.MAST_DEF) {
 				controller.sendProposition(jeu.getPartie1());
 				jpDefMast.devIndice();
-				System.out.println("dans le if");
 			}
-			else {System.out.println("dans le else");}
 			ajouterPanneauxDeBourrageDeChaqueCote();
 			this.add(jpDefMast);
 		}
@@ -114,6 +110,10 @@ public class PanelJeu extends JPanel {
 			jeu.getPartie2().setActif(false);
 			jpDefMast = new GamePanelMastermind(configuration, jeu.getModeDeJeu(), jeu.getPartie2(), controller);
 			jpDefMast.setPreferredSize(smallSize);
+			if(configuration.isDevModEnJeu() && jeu.getPartie2().getModeDePartie() == ModeDePartie.MAST_DEF) {
+				controller.sendProposition(jeu.getPartie2());
+				jpDefMast.devIndice();
+			}
 
 			this.setLayout(new BorderLayout());
 			this.add(jpChalMast, BorderLayout.WEST);

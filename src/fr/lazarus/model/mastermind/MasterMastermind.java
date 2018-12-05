@@ -14,8 +14,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- * Classe du model mastermind retournant un indice en fonction de la proposition donnée
- *
+ * Classe du model mastermind retournant un indice en fonction de la proposition donnée par le Bean partie
  * @author Ben
  */
 public class MasterMastermind implements ModelMaster, Observable {
@@ -27,9 +26,9 @@ public class MasterMastermind implements ModelMaster, Observable {
     private Observateur obs;
 
     private Configuration config;
-	private Partie partie;
-	private String solution;
-	private String proposition;
+    private Partie partie;
+    private String solution;
+    private String proposition;
 
     private int noir = 0, blanc =1;
 
@@ -37,10 +36,16 @@ public class MasterMastermind implements ModelMaster, Observable {
     private ArrayList<Integer> sol;
     private ArrayList<Integer> result;
 
-	public MasterMastermind(Configuration config, Partie partie, Observateur obs){
-	    this.config = config;
-	    this.partie = partie;
-	    this.obs = obs;
+    /**
+     * Constructeur, recupere les parametres et initialise la classe
+     * @param config
+     * @param partie
+     * @param obs
+     */
+    public MasterMastermind(Configuration config, Partie partie, Observateur obs){
+        this.config = config;
+        this.partie = partie;
+        this.obs = obs;
         this.addObservateur(obs);
 
         if (partie.getModeDePartie().equals(ModeDePartie.MAST_CHAL)) {
@@ -53,23 +58,27 @@ public class MasterMastermind implements ModelMaster, Observable {
      * @param partie Objet Partie
      * @return partie Objet Partie
      */
-	public void resolve(Partie partie) {
-		this.partie = partie;
-		solution = partie.getSolution();
-		proposition = partie.getProposition();
+    public void resolve(Partie partie) {
+        this.partie = partie;
+        solution = partie.getSolution();
+        proposition = partie.getProposition();
 
-		prop = new ArrayList<>();
-		sol = new ArrayList<>();
-		result = new ArrayList<>();
+        prop = new ArrayList<>();
+        sol = new ArrayList<>();
+        result = new ArrayList<>();
 
-		for (int i = 0; i<proposition.length(); i++) {
-			prop.add(Integer.valueOf(proposition.substring(i, i+1)));
-			sol.add(Integer.valueOf(solution.substring(i, i+1)));
-		}
+        for (int i = 0; i<proposition.length(); i++) {
+            prop.add(Integer.valueOf(proposition.substring(i, i+1)));
+            sol.add(Integer.valueOf(solution.substring(i, i+1)));
+        }
+
+        if(partie.getModeDePartie() == ModeDePartie.MAST_CHAL) {
+            endGame();
+        }
 
         //les noirs
         boolean match = false;
-        for (int i = 0; i<prop.size(); i++) {
+        for (int i = 0; i < prop.size(); i++) {
             if (match) {
                 i = 0;
                 match = false;
@@ -99,18 +108,15 @@ public class MasterMastermind implements ModelMaster, Observable {
         }
 
         String str = "";
-		for (int i = 0; i<result.size(); i++){
-		    str += result.get(i);
+        for (int i = 0; i<result.size(); i++){
+            str += result.get(i);
         }
-		partie.setIndice(str);
+        partie.setIndice(str);
         if(partie.getModeDePartie() == ModeDePartie.MAST_CHAL) {
             this.partie.addTour();
-            endGame();
-
         }
-        logger.debug(partie.toString());
         updateObservateur();
-	}
+    }
 
     /**
      * Ajout des indices dans l'arrayList result et supprime l'index donné dans les arrayList prop et sol
@@ -129,17 +135,18 @@ public class MasterMastermind implements ModelMaster, Observable {
      * @return partie
      */
     public Partie endGame() {
-        System.out.println("endGame() de MasterMastermind");
         Long propInt = Long.parseLong(proposition);
         Long solInt = Long.parseLong(solution);
-        if (solInt == propInt) {
+        if (solInt.equals(propInt)) {
             partie.setEnCours(false);
             PopUpFinPartie pufp = new PopUpFinPartie(null, "Gagné", true, partie, obs);
+            logger.info("Gagné");
         }
         else {
             if(partie.getTour() == config.getTourMast()) {
                 partie.setEnCours(false);
                 PopUpFinPartie pufp = new PopUpFinPartie(null, "Perdu", true, partie, obs);
+                logger.info("Perdu");
             }
         }
         return partie;
@@ -151,10 +158,9 @@ public class MasterMastermind implements ModelMaster, Observable {
 
     public void updateObservateur() {
         for(Observateur obs : listObservateur) {
-            System.out.println("updateObservateur() de MasterMastermind");
-            System.out.println(partie.toString());
             obs.update(partie);
         }
+        logger.info(partie.toString());
     }
 
     public void delObservateur() {}

@@ -6,6 +6,9 @@ import fr.lazarus.model.plusMoins.JoueurPlus;
 import fr.lazarus.model.plusMoins.MasterPlus;
 import fr.lazarus.observer.Observateur;
 
+/**
+ * Classe instanciant les parties en fonction des modes de jeu
+ */
 public class Jeu {
 
 	private Partie partie1, partie2;
@@ -16,7 +19,6 @@ public class Jeu {
 	private MasterMastermind masterMastermind;
 	private JoueurPlus joueurPlus;
 	private JoueurMastermind joueurMastermind;
-	private boolean actifChal = true, actifDef = false;
 
 	public Jeu(ModeDeJeu modeDeJeu, Configuration config, Observateur obs) {
 		this.modeDeJeu = modeDeJeu;
@@ -48,6 +50,9 @@ public class Jeu {
 		else if(modeDeJeu.equals(ModeDeJeu.MAST_DEF)) {
 			partie1 = new Partie("partie1", ModeDePartie.MAST_DEF);
 			joueurMastermind = new JoueurMastermind(config, partie1, obs);
+			if(config.isDevModEnJeu()) {
+				masterMastermind = new MasterMastermind(config, partie1, obs);
+			}
 			joueurMastermind.initOrdinateur(partie1);
 		}
 		else if(modeDeJeu.equals(ModeDeJeu.PLUS_DUEL)) {
@@ -66,21 +71,11 @@ public class Jeu {
 		}
 	}
 
-	public void initOrdi(Partie partie) {
-        if(partie.getModeDePartie().equals(ModeDePartie.PLUS_CHAL)) {
-            joueurPlus.initOrdinateur(partie);
-        }
-        else{
-            joueurMastermind.initOrdinateur(partie);
-        }
-	}
-
 	/**
 	 * L'ordinateur renvoie un indice en fonction de la variable proposition de l'objet partie passé en parametre
 	 * @param partie
 	 */
 	public void indiceOrdi (Partie partie) {
-		System.out.println("indiceOrdi() de Jeu");
         if(partie.getModeDePartie().equals(ModeDePartie.PLUS_CHAL)){
             masterPlus.resolve(partie);
         }
@@ -101,7 +96,6 @@ public class Jeu {
 	 * @param partie
 	 */
 	public void propOrdi(Partie partie) {
-		System.out.println("propOrdi() de Jeu");
 		if(partie.getModeDePartie().equals(ModeDePartie.PLUS_CHAL)){
             joueurPlus.propositionOrdinateur(partie);
         }
@@ -116,31 +110,7 @@ public class Jeu {
         }
 	}
 
-	/**
-	 * Modifie les boolean actifChal en false et actifDef en true a chaque appel.
-	 */
-	public void switchModeDef() {
-		System.out.println("switchModeDef() de Jeu");
-		actifChal = false;
-		actifDef = true;
-	}
-
-	/**
-	 * Modifie les boolean actifChal en true et actifDef en false a chaque appel.
-	 */
-	public void switchModeChal() {
-		System.out.println("switchModeChal() de Jeu");
-		actifChal = true;
-		actifDef = false;
-	}
-
 	// -- GUETTER SETTER
-	
-	public boolean isActifChal() {return actifChal;}
-	public void setActifChal(boolean actifChal) {this.actifChal = actifChal;}
-
-	public boolean isActifDef() {return actifDef;}
-	public void setActifDef(boolean actifDef) {this.actifDef = actifDef;}
 
 	public Partie getPartie1() {return partie1;}
 	public void setPartie1(Partie partie1) {this.partie1 = partie1;}

@@ -85,8 +85,7 @@ public class MainFrame extends JFrame implements Observateur {
 
         initPanel();
         initMenu();
-        logger.debug("Le contenu de la fenêtre a été initalisée");
-        logger.debug("configuration : "+ config.toString());
+        logger.info("Le contenu de la fenêtre a été initalisée");
     }
 
     /**
@@ -116,9 +115,9 @@ public class MainFrame extends JFrame implements Observateur {
         nouveauJeu.add(lePlusMoins);
         lePlusMoinsChal.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent arg0) {
-
+                panelJeu = null;
                 jeu = new Jeu(ModeDeJeu.PLUS_CHAL, config, obs);
-                logger.debug(jeu.getPartie1().getSolution());
+                logger.info(jeu.getPartie1().toString());
                 panelJeu = new PanelJeu(jeu, config, obs);
                 contentPane.removeAll();
                 contentPane.add(panelJeu, BorderLayout.CENTER);
@@ -128,6 +127,7 @@ public class MainFrame extends JFrame implements Observateur {
 
         lePlusMoinsDef.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent arg0) {
+                panelJeu = null;
                 jeu = new Jeu(ModeDeJeu.PLUS_DEF, config, obs);
                 panelJeu = new PanelJeu(jeu, config, obs);
                 contentPane.removeAll();
@@ -138,6 +138,7 @@ public class MainFrame extends JFrame implements Observateur {
 
         lePlusMoinsDuel.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent arg0) {
+                panelJeu = null;
                 jeu = new Jeu(ModeDeJeu.PLUS_DUEL, config, obs);
                 panelJeu = new PanelJeu(jeu, config, obs);
                 contentPane.removeAll();
@@ -153,6 +154,7 @@ public class MainFrame extends JFrame implements Observateur {
 
         mastermindChal.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
+                panelJeu = null;
                 jeu = new Jeu(ModeDeJeu.MAST_CHAL, config, obs);
                 panelJeu = new PanelJeu(jeu, config, obs);
                 contentPane.removeAll();
@@ -163,6 +165,7 @@ public class MainFrame extends JFrame implements Observateur {
 
         mastermindDef.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                panelJeu = null;
                 jeu = new Jeu(ModeDeJeu.MAST_DEF, config, obs);
                 panelJeu = new PanelJeu(jeu, config, obs);
                 contentPane.removeAll();
@@ -173,6 +176,7 @@ public class MainFrame extends JFrame implements Observateur {
 
         mastermindDuel.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                panelJeu = null;
                 jeu = new Jeu(ModeDeJeu.MAST_DUEL, config, obs);
                 panelJeu = new PanelJeu(jeu, config, obs);
                 contentPane.removeAll();
@@ -231,25 +235,21 @@ public class MainFrame extends JFrame implements Observateur {
      */
     public void update(Configuration config) {
         this.config = config;
-        logger.debug("configuration : "+ config.toString());
     }
 
     /**
      * Methode de mise à jour de la partie par le model
      */
-
     public void update(Partie partie) {
         if(partie.getNom() == jeu.getPartie1().getNom()) {
-            System.out.println("methode update partie1 de TestSwitchPanel");
             jeu.setPartie1(partie);
-            if(jeu.getModeDeJeu() == ModeDeJeu.PLUS_DUEL || jeu.getModeDeJeu() == ModeDeJeu.MAST_DUEL && panelJeu != null) {
+            if(jeu.getModeDeJeu() == ModeDeJeu.PLUS_DUEL && panelJeu != null || jeu.getModeDeJeu() == ModeDeJeu.MAST_DUEL && panelJeu != null) {
                 panelJeu.defTurn();
             }
         }
         else {
-            System.out.println("methode update partie2 de TestSwitchPanel");
             jeu.setPartie2(partie);
-            if(jeu.getModeDeJeu() == ModeDeJeu.PLUS_DUEL || jeu.getModeDeJeu() == ModeDeJeu.MAST_DUEL && panelJeu != null) {
+            if(jeu.getModeDeJeu() == ModeDeJeu.PLUS_DUEL && panelJeu != null || jeu.getModeDeJeu() == ModeDeJeu.MAST_DUEL && panelJeu != null) {
                 panelJeu.chalTurn();
             }
         }
@@ -259,9 +259,7 @@ public class MainFrame extends JFrame implements Observateur {
      * Vérification du choix de fin de partie si nouvelle partie ou menu principal
      */
     public void update(String choixFinJeu) {
-        if 	(choixFinJeu == "nouvellePartie") {
-            System.out.println("nouvelle partie");
-
+        if 	(choixFinJeu.equals("nouvellePartie")) {
             if (jeu.getModeDeJeu().equals(ModeDeJeu.PLUS_CHAL)) {
                 lePlusMoinsChal.doClick();
             }
@@ -281,7 +279,7 @@ public class MainFrame extends JFrame implements Observateur {
                 mastermindDuel.doClick();
             }
         }
-        else if (choixFinJeu == "menuPrincipal"){
+        else if (choixFinJeu.equals("menuPrincipal")) {
             contentPane.removeAll();
             contentPane.add(accueil, BorderLayout.CENTER);
             contentPane.repaint();

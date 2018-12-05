@@ -7,12 +7,15 @@ import fr.lazarus.model.mastermind.Balle;
 import fr.lazarus.model.mastermind.TypeCouleur;
 
 import javax.swing.*;
+import javax.swing.JScrollPane;
 import javax.swing.border.BevelBorder;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe etant le centre du panel de jeu, affiche les données de la partie
+ */
 public class CenterGamePanelMastermind extends JPanel {
 
     /**
@@ -55,8 +58,6 @@ public class CenterGamePanelMastermind extends JPanel {
     private LigneTableauMast ligneTableau = null;
     private List<LigneTableauMast> listLigneTableau = new ArrayList<>();
 
-    private Container contentPane = this;
-
     public CenterGamePanelMastermind(Configuration config, Partie partie) {
 
         this.config = config;
@@ -65,27 +66,23 @@ public class CenterGamePanelMastermind extends JPanel {
         initPanel();
     }
 
+    /**
+     * Initialisation du panel
+     */
     public void initPanel(){
 
         jpLeft.setLayout(new GridLayout(config.getTourMast()+1, 1, 10, 5));
-        //jpLeft.setPreferredSize(new Dimension(125, 700));
-        jpLeft.setBorder(BorderFactory.createLineBorder(Color.GREEN));
-
         jpCenter.setLayout(new GridLayout(config.getTourMast()+1, 2, 5, 5));
-        //jpCenter.setPreferredSize(new Dimension(350, 700));
-        jpCenter.setBorder(BorderFactory.createLineBorder(Color.PINK));
-
         jpRight.setLayout(new GridLayout(config.getTourMast()+1, 1, 5, 5));
-        //jpRight.setPreferredSize(new Dimension(150, 700));
-        jpRight.setBorder(BorderFactory.createLineBorder(Color.YELLOW));
+
 
         //-- Je rempli le GridLayout
         for (int i=0; i<config.getTourMast()+1; i++) {
             //- La numérotation du nombre de tour
             JLabel jlTour = new JLabel(tour[i]);
-            jlTour.setVisible(true);
+            jlTour.setVisible(false);
             jlTour.setFont(font);
-            jlTour.setPreferredSize(new Dimension(125, 60));
+            jlTour.setPreferredSize(new Dimension(75, 60));
             jlTour.setHorizontalAlignment(JLabel.RIGHT);
             jlTour.setVerticalAlignment(JLabel.CENTER);
             jpLeft.add(jlTour);
@@ -95,7 +92,7 @@ public class CenterGamePanelMastermind extends JPanel {
             if (i > 0) {
                 jpProp.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
             }
-            jpProp.setVisible(true);
+            jpProp.setVisible(false);
             jpProp.setBackground(Color.WHITE);
             jpProp.setPreferredSize(new Dimension(350, 60));
             jpProp.setFont(font);
@@ -103,7 +100,7 @@ public class CenterGamePanelMastermind extends JPanel {
 
             //- Les indications du Maitre du jeux
             JPanel jpIndic = new JPanel();
-            jpIndic.setVisible(true);
+            jpIndic.setVisible(false);
             jpIndic.setPreferredSize(new Dimension(150, 60));
             jpIndic.setFont(font);
             jpIndic.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
@@ -132,9 +129,8 @@ public class CenterGamePanelMastermind extends JPanel {
         jpScrollable.add(jpRight, BorderLayout.EAST);
         jScrollPane.setBorder(BorderFactory.createLineBorder(Color.black));
         jScrollPane.setViewportView(jpScrollable);
-
-        jScrollPane.setBounds(10, 101, 750, 700);
-        contentPane.add(jScrollPane, BorderLayout.CENTER);
+        jScrollPane.setPreferredSize(new Dimension(650, 700));
+        this.add(jScrollPane, BorderLayout.CENTER);
 
     }
 
@@ -146,7 +142,6 @@ public class CenterGamePanelMastermind extends JPanel {
     public void stringToImage(String str, JPanel jPanel){
         for(int i = 0; i<str.length(); i++){
             JLabel jLabel = new JLabel(balles[Character.getNumericValue(str.charAt(i))].getImageIconMoy());
-            //jLabel.setBorder(new EmptyBorder(30, 0, 0, 0));
             jPanel.add(jLabel);
         }
         jPanel.revalidate();
@@ -173,6 +168,10 @@ public class CenterGamePanelMastermind extends JPanel {
         jPanel.revalidate();
     }
 
+    /**
+     * Rend la ligne à l'index visible dans le JScrollPane
+     * @param index
+     */
     public void setVisibleLine(int index) {
         if (partie.getModeDePartie() == ModeDePartie.MAST_CHAL) {
             listLigneTableau.get(index).getJlTour().setVisible(true);
@@ -188,6 +187,10 @@ public class CenterGamePanelMastermind extends JPanel {
         }
     }
 
+    /**
+     * Ajoute les données dans la ligne en fonction du tour
+     * @param partie
+     */
     public void addDataLine(Partie partie) {
         if (partie.getModeDePartie() == ModeDePartie.MAST_CHAL) {
             stringToImage(partie.getProposition(), listLigneTableau.get(partie.getTour()).getJpProps());

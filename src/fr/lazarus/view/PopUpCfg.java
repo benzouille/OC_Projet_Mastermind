@@ -274,7 +274,7 @@ public class PopUpCfg extends JDialog implements Observable {
 			config.setCombiMast(combiMast);
 			config.setCouleurMast(couleurMast);
 			config.setCfg();
-			logger.debug("configuration : "+ config.toString());
+
 			updateObservateur();
 		}
 	}
@@ -309,8 +309,10 @@ public class PopUpCfg extends JDialog implements Observable {
 	 * Renvoie aux observateurs l'objet configuration
 	 */
 	public void updateObservateur() {
-		for(Observateur obs : listObservateur)
+		for(Observateur obs : listObservateur) {
 			obs.update(config);
+		}
+		logger.info(config.toString());
 	}
 
 	public void delObservateur() {
