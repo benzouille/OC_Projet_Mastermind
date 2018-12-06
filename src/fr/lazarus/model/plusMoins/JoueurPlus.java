@@ -33,9 +33,9 @@ public class JoueurPlus implements ModelJoueur, Observable {
 
     /**
      * Constructeur, recupere les parametres et initialise la classe
-     * @param config
-     * @param partie
-     * @param obs
+     * @param config Configuration
+     * @param partie Partie
+     * @param obs Observateur
      */
     public JoueurPlus(Configuration config, Partie partie, Observateur obs) {
         this.obs = obs;
@@ -47,6 +47,7 @@ public class JoueurPlus implements ModelJoueur, Observable {
 
     /**
      * Au début d'une partie lance la première proposition de l'ordinateur.
+     * @param partie Partie
      */
     public void initOrdinateur(Partie partie) {
 

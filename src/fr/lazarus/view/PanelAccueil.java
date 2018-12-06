@@ -37,7 +37,7 @@ public class PanelAccueil extends JPanel {
 	 * Methode d'initialisation du panel
 	 */
 	public void initPanel(){
-		jlTitre = new JLabel("PROJET 3");
+		jlTitre = new JLabel("LA BOITE A JEU");
 		jlTitre.setPreferredSize(new Dimension(800, 300));
 		jlTitre.setHorizontalAlignment(JLabel.CENTER);
 		jlTitre.setFont(new Font("Lucida Console", Font.BOLD, 50));

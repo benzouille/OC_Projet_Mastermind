@@ -41,9 +41,9 @@ public class JoueurMastermind implements ModelJoueur, Observable {
 
     /**
      * Constructeur, recupere les parametres et initialise la classe
-     * @param config
-     * @param partie
-     * @param obs
+     * @param config Configuration
+     * @param partie Partie
+     * @param obs Observateur
      */
     public JoueurMastermind(Configuration config, Partie partie, Observateur obs){
         this.config = config;
@@ -65,6 +65,7 @@ public class JoueurMastermind implements ModelJoueur, Observable {
 
     /**
      * Au début d'une partie lance la première proposition de l'ordinateur.
+     * @param partie Partie
      */
     public void initOrdinateur(Partie partie) {
         if (partie.getIndice().equals("vide")) {
@@ -80,7 +81,7 @@ public class JoueurMastermind implements ModelJoueur, Observable {
     /**
      * Renvoie une proposition dans le Bean Partie en fonction de l'indice extrait du Bean.
      * @param partie Partie
-     * @return
+     * @return proposition String
      */
     public String propositionOrdinateur(Partie partie) {
 

@@ -17,6 +17,9 @@ import fr.lazarus.view.game.mastermind.PopUpCombiMastermind;
 import fr.lazarus.view.game.plusMoins.GamePanelPlusMoins;
 import fr.lazarus.view.game.plusMoins.PopUpCombiPlus;
 
+/**
+ * Classe qui initialise le panel du jeu en fonction du mode de jeu
+ */
 public class PanelJeu extends JPanel {
 
 	private Jeu jeu;
@@ -30,6 +33,12 @@ public class PanelJeu extends JPanel {
 			smallSize = new Dimension (845, 1040),
 			bourrageSize  = new Dimension(430, 1040);
 
+    /**
+     * constructeur
+     * @param jeu Jeu
+     * @param configuration Configuration
+     * @param obs Observateur
+     */
 	public PanelJeu(Jeu jeu, Configuration configuration, Observateur obs) {
 		this.jeu = jeu;
 		this.configuration = configuration;
@@ -37,6 +46,9 @@ public class PanelJeu extends JPanel {
 		init();
 	}
 
+    /**
+     * initialisation du Panel
+     */
 	public void init() {
 		if(jeu.getModeDeJeu().equals(ModeDeJeu.PLUS_CHAL)){
 			this.setPreferredSize(smallSize);
@@ -163,7 +175,8 @@ public class PanelJeu extends JPanel {
 
 	/**
 	 * Mettre à jour le focus du second panneau de jeu via un Thread Indépendant.
-	 * @param jpTarget
+	 * @param jpTarget GamePanelPlusMoins
+	 * @param secondes Integer
 	 */
 	public static void updateFocus(GamePanelPlusMoins jpTarget, Integer secondes) {
 		new Thread(new Runnable() {
@@ -187,7 +200,8 @@ public class PanelJeu extends JPanel {
 
     /**
      * Mettre à jour le focus du second panneau de jeu via un Thread Indépendant.
-     * @param jpTarget
+     * @param jpTarget GamePanelMastermind
+	 * @param secondes Integer
      */
     public static void updateFocus(GamePanelMastermind jpTarget, Integer secondes) {
         new Thread(new Runnable() {

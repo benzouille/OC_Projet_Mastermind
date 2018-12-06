@@ -62,6 +62,14 @@ public class PopUpFinPartie extends JDialog implements Observable{
 
     private JButton nouvJeu, menuPrinc, quitter;
 
+    /**
+     * Constructeur
+     * @param parent JFrame
+     * @param title String
+     * @param modal boolean
+     * @param partie Partie
+     * @param obs Observateur
+     */
     public PopUpFinPartie(JFrame parent, String title, boolean modal,Partie partie, Observateur obs) {
         this.addObservateur(obs);
         this.setSize(870, 140);

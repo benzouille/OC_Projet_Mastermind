@@ -34,13 +34,14 @@ public class MasterMastermind implements ModelMaster, Observable {
 
     private ArrayList<Integer> prop;
     private ArrayList<Integer> sol;
+    private ArrayList<Integer> verrou;
     private ArrayList<Integer> result;
 
     /**
      * Constructeur, recupere les parametres et initialise la classe
-     * @param config
-     * @param partie
-     * @param obs
+     * @param config Configuration
+     * @param partie Partie
+     * @param obs Observateur
      */
     public MasterMastermind(Configuration config, Partie partie, Observateur obs){
         this.config = config;
@@ -55,8 +56,7 @@ public class MasterMastermind implements ModelMaster, Observable {
 
     /**
      * Compare les differences entre la proposition et la solution puis modifie dans l'objet partie l'indices avec des 0 pour les noirs et des 1 pour les blancs
-     * @param partie Objet Partie
-     * @return partie Objet Partie
+     * @param partie Partie
      */
     public void resolve(Partie partie) {
         this.partie = partie;
@@ -65,6 +65,7 @@ public class MasterMastermind implements ModelMaster, Observable {
 
         prop = new ArrayList<>();
         sol = new ArrayList<>();
+        verrou = new ArrayList<>();
         result = new ArrayList<>();
 
         for (int i = 0; i<proposition.length(); i++) {
@@ -76,9 +77,11 @@ public class MasterMastermind implements ModelMaster, Observable {
             endGame();
         }
 
+        //TODO Remanier les boucles avec un ajout d'un arraylist pour ne pas supprimer dans le prop et le sol
         //les noirs
         boolean match = false;
         for (int i = 0; i < prop.size(); i++) {
+            logger.debug("prop.size()" + prop.size());
             if (match) {
                 i = 0;
                 match = false;

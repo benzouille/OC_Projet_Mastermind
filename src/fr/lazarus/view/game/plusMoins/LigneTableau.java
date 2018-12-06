@@ -3,6 +3,9 @@ package fr.lazarus.view.game.plusMoins;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+/**
+ * Objet contenant les jLabel de chaque ligne du tableau du Panel PlusMoins
+ */
 public class LigneTableau {
 
     private JLabel jlTour;
@@ -10,7 +13,10 @@ public class LigneTableau {
     private JLabel jlIndic;
 
     /**
-     *
+     * Constructeur
+     * @param jlTour JLabel
+     * @param jtfProps JTextField
+     * @param jlIndic JLabel
      */
     public LigneTableau(JLabel jlTour, JTextField jtfProps, JLabel jlIndic) {
         this.jlTour = jlTour;

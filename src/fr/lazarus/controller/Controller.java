@@ -15,9 +15,9 @@ public class Controller {
 
     /**
      * Constructeur
-     * @param config
-     * @param partie
-     * @param jeu
+     * @param config Configuration
+     * @param partie Partie
+     * @param jeu Observateur
      */
     public Controller(Configuration config, Partie partie,Jeu jeu) {
         this.config =config;
@@ -27,7 +27,7 @@ public class Controller {
 
     /**
      * Envoie la proposition au model
-     * @param partie
+     * @param partie Partie
      */
     public void sendProposition(Partie partie) {
         this.partie = partie;
@@ -36,7 +36,7 @@ public class Controller {
 
     /**
      * Envoie l'indice au model
-     * @param partie
+     * @param partie Partie
      */
     public void sendIndice(Partie partie) {
         this.partie = partie;

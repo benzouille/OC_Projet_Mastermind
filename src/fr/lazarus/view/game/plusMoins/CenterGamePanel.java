@@ -9,10 +9,7 @@ import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.BorderFactory;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.border.BevelBorder;
 
 import fr.lazarus.model.Configuration;
@@ -34,7 +31,11 @@ public class CenterGamePanel extends JPanel {
 	private Partie partie;
 
 	private JPanel jpLeft = new JPanel(), 
-			jpCenter = new JPanel();
+			jpCenter = new JPanel(),
+            jpRight = new JPanel(),
+			jpScrollable = new JPanel();
+
+    private JScrollPane jScrollPane = new JScrollPane();
 
 	private Font font = new Font("Sego UI",Font.PLAIN,24);
 
@@ -45,6 +46,11 @@ public class CenterGamePanel extends JPanel {
 
 	private Container contentPane = this;
 
+	/**
+	 * constructeur
+	 * @param config Configuration
+	 * @param partie Partie
+	 */
 	public CenterGamePanel(Configuration config, Partie partie) {
 
 		this.config = config;
@@ -53,13 +59,16 @@ public class CenterGamePanel extends JPanel {
 		initPanel();
 	}
 
+    /**
+     * intialise le Panel
+     */
 	public void initPanel(){
 
 		jpLeft.setLayout(new GridLayout(config.getTourPlusMoins()+1, 1, 10, 5));
-		jpLeft.setPreferredSize(new Dimension(125, 700));
 
-		jpCenter.setLayout(new GridLayout(config.getTourPlusMoins()+1, 2, 5, 5));
-		jpCenter.setPreferredSize(new Dimension(500, 700));
+		jpCenter.setLayout(new GridLayout(config.getTourPlusMoins()+1, 1, 5, 5));
+
+        jpRight.setLayout(new GridLayout(config.getTourPlusMoins()+1, 1, 10, 5));
 
 		//-- Je rempli le GridLayout
 		for (int i=0; i<config.getTourPlusMoins()+1; i++) {
@@ -67,6 +76,7 @@ public class CenterGamePanel extends JPanel {
 			JLabel jlTour = new JLabel(tour[i]);
 			jlTour.setVisible(false);
 			jlTour.setFont(font);
+            jlTour.setPreferredSize(new Dimension(75, 60));
 			jlTour.setHorizontalAlignment(JLabel.RIGHT);
 			jpLeft.add(jlTour);
 
@@ -78,6 +88,7 @@ public class CenterGamePanel extends JPanel {
 			jtfProps.setVisible(false);
 			jtfProps.setEditable(false);
 			jtfProps.setBackground(Color.WHITE);
+			jtfProps.setPreferredSize(new Dimension(250, 60));
 			jtfProps.setFont(font);
 			jtfProps.setHorizontalAlignment(JLabel.CENTER);
 			jpCenter.add(jtfProps);
@@ -86,9 +97,10 @@ public class CenterGamePanel extends JPanel {
 			JLabel jlIndic= new JLabel();
 			jlIndic.setVisible(false);
 			jlIndic.setFont(font);
+            jlIndic.setPreferredSize(new Dimension(250, 60));
 			jlIndic.setHorizontalAlignment(JLabel.CENTER);
 			jlIndic.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
-			jpCenter.add(jlIndic);
+			jpRight.add(jlIndic);
 
 			ligneTableau = new LigneTableau(jlTour, jtfProps, jlIndic);
 			listLigneTableau.add(ligneTableau);
@@ -102,13 +114,19 @@ public class CenterGamePanel extends JPanel {
 
 		setVisibleLine(0);
 
-		contentPane.add(jpLeft, BorderLayout.WEST);
-		contentPane.add(jpCenter, BorderLayout.CENTER);
+        jpScrollable.setLayout(new BorderLayout());
+        jpScrollable.add(jpLeft, BorderLayout.WEST);
+        jpScrollable.add(jpCenter, BorderLayout.CENTER);
+        jpScrollable.add(jpRight, BorderLayout.EAST);
+        jScrollPane.setBorder(BorderFactory.createLineBorder(Color.black));
+        jScrollPane.setViewportView(jpScrollable);
+        jScrollPane.setPreferredSize(new Dimension(650, 700));
+        this.add(jScrollPane, BorderLayout.CENTER);
 	}
 
 	/**
 	 * rend les lignes visibles à chaque tour.
-	 * @param index
+	 * @param index int
 	 */
 	public void setVisibleLine(int index) {
 		listLigneTableau.get(index).getJlTour().setVisible(true);
@@ -122,7 +140,7 @@ public class CenterGamePanel extends JPanel {
 
 	/**
 	 * Ajoute les données de la partie dans le tableau puis rend les lignes visibles. 
-	 * @param partie
+	 * @param partie Partie
 	 */
 	public void addDataLine(Partie partie) {
 		if (partie.getModeDePartie() == ModeDePartie.PLUS_CHAL) {

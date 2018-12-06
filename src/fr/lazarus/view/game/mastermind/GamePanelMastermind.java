@@ -43,8 +43,6 @@ public class GamePanelMastermind  extends JPanel {
 
     private Balle balles[] = {bleu, brun, cyan, jaune, orange, rose, rouge, vert, vertClair, violet, noir, blanc};
 
-    private Balle ballesIndice[] = {noir, blanc};
-
     private JPanel jpSouth, jpGauche, jpGaucheHaut, jpGaucheBas, jpCentre, jpCentreHaut, jpCentreBas, jpDroit, jpDroitHaut, jpDroitBas, jpSolution, jpProposition;
     private JLabel jlTitreSolution, jlTitreProposition, jlTitreIndice;
     private JButton okButton, cancelButton;
@@ -66,10 +64,10 @@ public class GamePanelMastermind  extends JPanel {
 
     /**
      * Constructeur
-     * @param config
-     * @param modeDeJeu
-     * @param partie
-     * @param controller
+     * @param config Configuration
+     * @param modeDeJeu ModeDeJeu
+     * @param partie Partie
+     * @param controller Controller
      */
     public GamePanelMastermind(Configuration config, ModeDeJeu modeDeJeu, Partie partie, Controller controller) {
         this.partie = partie;
@@ -151,6 +149,9 @@ public class GamePanelMastermind  extends JPanel {
         initPanelDroit();
     }
 
+    /**
+     * Panel avec les indications proposition, indice, solution.
+     */
     private void initPanelGauche() {
         jpGauche = new JPanel();
         jpGauche.setPreferredSize(new Dimension(125, 150));
@@ -191,6 +192,9 @@ public class GamePanelMastermind  extends JPanel {
         jpSouth.add(jpGauche, BorderLayout.WEST);
     }
 
+    /**
+     * Panel contenant l'affichage de la proposition/indices et de la solution
+     */
     private void initPanelCentre() {
 
         jpCentre = new JPanel();
@@ -229,6 +233,9 @@ public class GamePanelMastermind  extends JPanel {
         jpSouth.add(jpCentre, BorderLayout.CENTER);
     }
 
+    /**
+     * Panel contenant le bouton ok et annuler
+     */
     private void initPanelDroit() {
 
         jpDroit = new JPanel();
@@ -297,6 +304,9 @@ public class GamePanelMastermind  extends JPanel {
         this.revalidate();
     }
 
+    /**
+     * Methode pour le Mode Challenger, envoie l'objet partie au controlleur puis au CenterGamePanel si les données sont conforme
+     */
     public void okMastChal() {
 
         if (isOkProposition(strProposition)) {
@@ -308,11 +318,13 @@ public class GamePanelMastermind  extends JPanel {
             if(modeDeJeu == ModeDeJeu.MAST_DUEL) {
                 stopTurn();
             }
-
             this.revalidate();
         }
     }
 
+    /**
+     * Methode pour le Mode Defenseur, envoie l'objet partie au controlleur puis au CenterGamePanel si les données sont conforme
+     */
     public void okMastDef() {
         if(isOkIndice(strProposition)){
             jpProposition.removeAll();
@@ -351,6 +363,11 @@ public class GamePanelMastermind  extends JPanel {
         }
     }
 
+    /**
+     * Verifie l'integritée de la proposition pour le mode defenseur
+     * @param indice String
+     * @return dataIsOk boolean
+     */
     public boolean isOkIndice(String indice) {
         dataIsOk = true;
         if (indice.length() > config.getCombiMast()) {
@@ -367,6 +384,11 @@ public class GamePanelMastermind  extends JPanel {
         return dataIsOk;
     }
 
+    /**
+     * Verifie l'integritée de la proposition pour le mode challenger
+     * @param proposition String
+     * @return dataIsOk boolean
+     */
     public Boolean isOkProposition(String proposition) {
         dataIsOk = true;
 
@@ -381,6 +403,9 @@ public class GamePanelMastermind  extends JPanel {
         return dataIsOk;
     }
 
+    /**
+     * Listener du bouton ok utilise les methodes  okMastChal() et  okMastDef()
+     */
     class OkButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
 
@@ -393,6 +418,9 @@ public class GamePanelMastermind  extends JPanel {
         }
     }
 
+    /**
+     *  Listener du bouton annuler, vide le panel jpProposition et le string strProposition
+     */
     class CancelButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             strProposition = "";

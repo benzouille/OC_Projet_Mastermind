@@ -58,6 +58,11 @@ public class CenterGamePanelMastermind extends JPanel {
     private LigneTableauMast ligneTableau = null;
     private List<LigneTableauMast> listLigneTableau = new ArrayList<>();
 
+    /**
+     * Constructeur
+     * @param config Configuration
+     * @param partie Partie
+     */
     public CenterGamePanelMastermind(Configuration config, Partie partie) {
 
         this.config = config;
@@ -72,8 +77,8 @@ public class CenterGamePanelMastermind extends JPanel {
     public void initPanel(){
 
         jpLeft.setLayout(new GridLayout(config.getTourMast()+1, 1, 10, 5));
-        jpCenter.setLayout(new GridLayout(config.getTourMast()+1, 2, 5, 5));
-        jpRight.setLayout(new GridLayout(config.getTourMast()+1, 1, 5, 5));
+        jpCenter.setLayout(new GridLayout(config.getTourMast()+1, 1, 5, 5));
+        jpRight.setLayout(new GridLayout(config.getTourMast()+1, 1, 10, 5));
 
 
         //-- Je rempli le GridLayout
@@ -170,7 +175,7 @@ public class CenterGamePanelMastermind extends JPanel {
 
     /**
      * Rend la ligne à l'index visible dans le JScrollPane
-     * @param index
+     * @param index int
      */
     public void setVisibleLine(int index) {
         if (partie.getModeDePartie() == ModeDePartie.MAST_CHAL) {
@@ -189,7 +194,7 @@ public class CenterGamePanelMastermind extends JPanel {
 
     /**
      * Ajoute les données dans la ligne en fonction du tour
-     * @param partie
+     * @param partie Partie
      */
     public void addDataLine(Partie partie) {
         if (partie.getModeDePartie() == ModeDePartie.MAST_CHAL) {

@@ -73,7 +73,7 @@ public class Jeu {
 
 	/**
 	 * L'ordinateur renvoie un indice en fonction de la variable proposition de l'objet partie passé en parametre
-	 * @param partie
+	 * @param partie Partie
 	 */
 	public void indiceOrdi (Partie partie) {
         if(partie.getModeDePartie().equals(ModeDePartie.PLUS_CHAL)){
@@ -93,7 +93,7 @@ public class Jeu {
 	/**
 	 * L'ordinateur renvoie une proposition en fonction de la variable indice et de la proposition précdente de l'objet partie passé en parametre,
 	 * puis il fait un switchMode.
-	 * @param partie
+	 * @param partie Partie
 	 */
 	public void propOrdi(Partie partie) {
 		if(partie.getModeDePartie().equals(ModeDePartie.PLUS_CHAL)){

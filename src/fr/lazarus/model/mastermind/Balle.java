@@ -12,7 +12,7 @@ public class Balle {
 
     /**
      * Constructeur, génère les ImageIcon du TypeCouleur donné.
-     * @param typeCouleur
+     * @param typeCouleur TypeCouleur
      */
 	public Balle(TypeCouleur typeCouleur) {
 		this.typeCouleur = typeCouleur;
@@ -24,7 +24,7 @@ public class Balle {
 
     /**
      * Descriptif de l'objet
-     * @return
+     * @return str String
      */
 	public String toString() {
 		String str = "couleur : " + getTypeCouleur().getCouleur() + " valeur :" + getTypeCouleur().getValeur();

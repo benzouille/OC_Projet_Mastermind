@@ -1,0 +1,10 @@
+fr.lazarus
+fr.lazarus.controller
+fr.lazarus.model
+fr.lazarus.model.mastermind
+fr.lazarus.model.plusMoins
+fr.lazarus.observer
+fr.lazarus.view
+fr.lazarus.view.game
+fr.lazarus.view.game.mastermind
+fr.lazarus.view.game.plusMoins

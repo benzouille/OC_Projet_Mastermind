@@ -79,7 +79,7 @@ public class MainFrame extends JFrame implements Observateur {
     public MainFrame() {
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setTitle("Projet 3");
+        this.setTitle("La boite à jeu");
         this.setSize(size);
         config = new Configuration();
 
@@ -232,6 +232,7 @@ public class MainFrame extends JFrame implements Observateur {
 
     /**
      * Methode de mise à jour de la configuration par popUpCfg
+     * @param config Configuration
      */
     public void update(Configuration config) {
         this.config = config;
@@ -239,6 +240,7 @@ public class MainFrame extends JFrame implements Observateur {
 
     /**
      * Methode de mise à jour de la partie par le model
+     * @param partie Partie
      */
     public void update(Partie partie) {
         if(partie.getNom() == jeu.getPartie1().getNom()) {
@@ -257,6 +259,7 @@ public class MainFrame extends JFrame implements Observateur {
 
     /**
      * Vérification du choix de fin de partie si nouvelle partie ou menu principal
+     * @param choixFinJeu String
      */
     public void update(String choixFinJeu) {
         if 	(choixFinJeu.equals("nouvellePartie")) {

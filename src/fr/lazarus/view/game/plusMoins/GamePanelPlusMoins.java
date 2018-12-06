@@ -57,9 +57,13 @@ public class GamePanelPlusMoins extends JPanel {
 	private boolean devMode;
 	private boolean dataIsOk;
 
-	/**
-	 * Constructeur
-	 */
+    /**
+     * Constructeur
+     * @param config Configuration
+     * @param modeDeJeu ModeDeJeu
+     * @param partie Partie
+     * @param controller Controller
+     */
 	public GamePanelPlusMoins(Configuration config, ModeDeJeu modeDeJeu, Partie partie, Controller controller) {
 		this.partie = partie;
 		this.modeDeJeu = modeDeJeu;
@@ -250,6 +254,9 @@ public class GamePanelPlusMoins extends JPanel {
 		this.revalidate();
 	}
 
+	/**
+	 * Methode pour le Mode Challenger, envoie l'objet partie au controlleur puis au CenterGamePanel si les données sont conforme
+	 */
 	public void okPlusChal() {
 		String proposition = jtfProposition.getText();
 
@@ -266,6 +273,9 @@ public class GamePanelPlusMoins extends JPanel {
 		}
 	}
 
+    /**
+     * Methode pour le Mode Defenseur, envoie l'objet partie au controlleur puis au CenterGamePanel si les données sont conforme
+     */
 	public void okPlusDef() {
 		String indice = jtfProposition.getText();
 		if(isOkIndice(indice)){
@@ -286,7 +296,12 @@ public class GamePanelPlusMoins extends JPanel {
 		this.revalidate();
 		}
 	}
-	
+
+    /**
+     * Verifie l'integritée de la proposition pour le mode defenseur
+     * @param indice String
+     * @return dataIsOk boolean
+     */
 	public boolean isOkIndice(String indice) {
 		dataIsOk = true;
 		if (indice.length() != config.getCombiPlusMoins()) {
@@ -304,7 +319,12 @@ public class GamePanelPlusMoins extends JPanel {
 		}
 		return dataIsOk;
 	}
-	
+
+    /**
+     * Verifie l'integritée de la proposition pour le mode challenger
+     * @param proposition String
+     * @return dataIsOk boolean
+     */
 	public Boolean isOkProposition(String proposition) {
 		dataIsOk = true;
 
@@ -324,6 +344,9 @@ public class GamePanelPlusMoins extends JPanel {
 		return dataIsOk;
 	}
 
+    /**
+     * NestedClass Listener du bouton ok utilise les methodes  okMastChal() et  okMastDef()
+     */
 	class OkButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 

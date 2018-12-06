@@ -3,10 +3,10 @@
 <Configuration status="WARN">
   <Appenders>
     <Console name="Console" target="SYSTEM_OUT">
-      <PatternLayout pattern="%d{HH:mm:ss.SSS} [Projet3 v0.6] %-5level %logger{36} - %msg%n"/>
+      <PatternLayout pattern="%d{HH:mm:ss.SSS} [Projet3 v1] %-5level %logger{36} - %msg%n"/>
     </Console>
     <File name="File" fileName="logs/Projet3.log" bufferedIO="true" advertise="true">
-        <PatternLayout pattern="%d{HH:mm:ss.SSS} [Projet3 v0.1] %-5level %logger{36} - %msg%n"/>
+        <PatternLayout pattern="%d{HH:mm:ss.SSS} [Projet3 v1] %-5level %logger{36} - %msg%n"/>
     </File>
   </Appenders>
   <Loggers>

@@ -39,7 +39,7 @@ public class PopUpCfg extends JDialog implements Observable {
 	//-- Les logs
 	private static final Logger logger = LogManager.getLogger();
 	//-- L'observateur
-	protected ArrayList<Observateur> listObservateur = new ArrayList<Observateur>();
+	protected ArrayList<Observateur> listObservateur = new ArrayList<>();
 	private JCheckBox devMode;
 	private Configuration config;
 	private int tourPlusMoins, tourMast, combiPlusMoins, combiMast, couleurMast;
@@ -47,11 +47,11 @@ public class PopUpCfg extends JDialog implements Observable {
 
 	/**
 	 * constructeur avec parametres
-	 * @param parent
-	 * @param title
-	 * @param modal
-	 * @param config
-	 * @param obs
+     * @param parent JFrame
+     * @param title String
+     * @param modal boolean
+     * @param config Configuration
+     * @param obs Observateur
 	 */
 	public PopUpCfg(JFrame parent, String title, boolean modal, Configuration config, Observateur obs) {
 		super(parent, title, modal);
@@ -278,6 +278,8 @@ public class PopUpCfg extends JDialog implements Observable {
 			updateObservateur();
 		}
 	}
+
+	//GETTER SETTER
 
 	public int getTourPlusMoins() {return tourPlusMoins;}
 	public void setTourPlusMoins(int tourPlusMoins) {this.tourPlusMoins = tourPlusMoins;}

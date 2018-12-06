@@ -63,21 +63,21 @@ public class Partie {
 
     /**
      * Génère la solution en fonction du nombre de chiffres présent dans nbreChiffre
-     * @param nbreChiffre
+     * @param nbreChiffre int
      */
 	public void ordiPartie(int nbreChiffre) { setSolution(random(nbreChiffre)); }
 
     /**
      * Génère la solution en fonction du nombre de chiffres présent dans nbreChiffre et les chiffres à utiliser avec nbreCouleur
-     * @param nbreChiffre
-     * @param nbreCouleur
+     * @param nbreChiffre int
+     * @param nbreCouleur int
      */
     public void ordiPartie(int nbreChiffre, int nbreCouleur) { setSolution(random(nbreChiffre, nbreCouleur)); }
 
 	/**
 	 * Génère une combinaison aléatoire d'une longueur égale à combiPlusMoins de l'objet configuration
-	 * @param nbreChiffre
-	 * @return random
+	 * @param nbreChiffre int
+	 * @return random String
 	 */
 	public String random(int nbreChiffre) {
 		int [] combi = new int[nbreChiffre];
@@ -90,8 +90,9 @@ public class Partie {
 
 	/**
 	 * Génère une combinaison aléatoire d'une longueur égale à combiMast avec des chiffres compris entre 0 et couleurMast de l'objet configuration
-	 * @param nbreChiffre, nbreCouleur
-	 * @return random
+	 * @param nbreChiffre int
+	 * @param nbreCouleur int
+	 * @return random String
 	 */
 	public String random(int nbreChiffre, int nbreCouleur) {
 		int [] combi = new int[nbreChiffre];
@@ -104,8 +105,8 @@ public class Partie {
 
 	/**
 	 * Convertit un tableau d'int en string
-	 * @param tab
-	 * @return str
+	 * @param tab tableau de int
+	 * @return str String
 	 */
 	private String convertTabIntToString(int [] tab) {
 		String str= "";

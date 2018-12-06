@@ -23,7 +23,7 @@ public class MasterPlus implements ModelMaster, Observable {
     //-- Les logs
     private static final Logger logger = LogManager.getLogger();
 
-    private ArrayList<Observateur> listObservateur = new ArrayList<Observateur>();
+    private ArrayList<Observateur> listObservateur = new ArrayList<>();
     private Observateur obs;
 
     private Partie partie;
@@ -32,9 +32,9 @@ public class MasterPlus implements ModelMaster, Observable {
 
     /**
      * Constructeur, recupere les parametres et initialise la classe
-     * @param config
-     * @param partie
-     * @param obs
+     * @param config Configuration
+     * @param partie Partie
+     * @param obs Observateur
      */
     public MasterPlus(Configuration config, Partie partie, Observateur obs) {
         this.obs = obs;
@@ -49,8 +49,7 @@ public class MasterPlus implements ModelMaster, Observable {
 
     /**
      * Compare les differences entre la proposition et la solution puis modifie dans l'objet partie l'indices avec les signes + - =
-     * @param partie
-     * @return partie
+     * @param partie Partie
      */
     public void resolve(Partie partie) {
 
