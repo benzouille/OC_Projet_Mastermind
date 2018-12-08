@@ -32,10 +32,7 @@ public class MasterMastermind implements ModelMaster, Observable {
 
     private int noir = 0, blanc =1;
 
-    private ArrayList<Integer> prop;
-    private ArrayList<Integer> sol;
-    private ArrayList<Integer> verrou;
-    private ArrayList<Integer> result;
+    private ArrayList<Integer> prop, sol, verrouProp, verrouSol, result;
 
     /**
      * Constructeur, recupere les parametres et initialise la classe
@@ -65,48 +62,39 @@ public class MasterMastermind implements ModelMaster, Observable {
 
         prop = new ArrayList<>();
         sol = new ArrayList<>();
-        verrou = new ArrayList<>();
+        verrouProp = new ArrayList<>();
+        verrouSol = new ArrayList<>();
         result = new ArrayList<>();
 
         for (int i = 0; i<proposition.length(); i++) {
             prop.add(Integer.valueOf(proposition.substring(i, i+1)));
             sol.add(Integer.valueOf(solution.substring(i, i+1)));
+            verrouProp.add(-1);
+            verrouSol.add(-1);
         }
 
         if(partie.getModeDePartie() == ModeDePartie.MAST_CHAL) {
             endGame();
         }
 
-        //TODO Remanier les boucles avec un ajout d'un arraylist pour ne pas supprimer dans le prop et le sol
         //les noirs
-        boolean match = false;
         for (int i = 0; i < prop.size(); i++) {
-            logger.debug("prop.size()" + prop.size());
-            if (match) {
-                i = 0;
-                match = false;
-            }
             if (prop.get(i).equals(sol.get(i))) {
                 addIndice(noir,i,i);
-                match = true;
             }
         }
 
         //les blancs
-        for (int i = 0; i < prop.size();) {
-            for (int y = 0; y < sol.size(); y++) {
-                if (prop.get(i).equals(sol.get(y))) {
-                    addIndice(blanc,i,y);
-                    match = true;
-                    break;
+        for (int i = 0; i < prop.size(); i++) {
+            if(verrouProp.get(i).equals(-1)) {
+                for (int y = 0; y < sol.size(); y++) {
+                    if (verrouSol.get(y).equals(-1)) {
+                        if (prop.get(i).equals(sol.get(y))) {
+                            addIndice(blanc, i, y);
+                            break;
+                        }
+                    }
                 }
-            }
-            if (match) {
-                i = 0;
-                match = false;
-            }
-            else {
-                i++;
             }
         }
 
@@ -122,15 +110,15 @@ public class MasterMastermind implements ModelMaster, Observable {
     }
 
     /**
-     * Ajout des indices dans l'arrayList result et supprime l'index donné dans les arrayList prop et sol
+     * Ajout des indices dans l'arrayList result et modifie par un "1" l'index donné dans les arrayList VerrouProp et verrouSol
      * @param couleur int
      * @param indexProp int
      * @param indexSol int
      */
     private void addIndice(int couleur, int indexProp, int indexSol){
         result.add(couleur);
-        prop.remove(indexProp);
-        sol.remove(indexSol);
+        verrouProp.set(indexProp, 1);
+        verrouSol.set(indexSol, 1);
     }
 
     /**

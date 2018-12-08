@@ -114,8 +114,8 @@ public class JoueurPlus implements ModelJoueur, Observable {
     public Partie endGame() {
         proposition = partie.getProposition();
         solution = partie.getSolution();
-        int prop = Integer.parseInt(proposition);
-        int sol = Integer.parseInt(solution);
+        long prop = Long.parseLong(proposition);
+        long sol = Long.parseLong(solution);
         if (sol == prop) {
             partie.setEnCours(false);
             @SuppressWarnings("unused")

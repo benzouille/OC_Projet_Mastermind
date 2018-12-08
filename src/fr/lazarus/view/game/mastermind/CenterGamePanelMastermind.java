@@ -88,8 +88,8 @@ public class CenterGamePanelMastermind extends JPanel {
             jlTour.setVisible(false);
             jlTour.setFont(font);
             jlTour.setPreferredSize(new Dimension(75, 60));
-            jlTour.setHorizontalAlignment(JLabel.RIGHT);
-            jlTour.setVerticalAlignment(JLabel.CENTER);
+            jlTour.setHorizontalAlignment(SwingConstants.CENTER);
+            jlTour.setVerticalAlignment(SwingConstants.CENTER);
             jpLeft.add(jlTour);
 
             //-- Les champs de saisie

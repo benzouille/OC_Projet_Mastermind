@@ -87,8 +87,8 @@ public class MasterPlus implements ModelMaster, Observable {
      * @return partie
      */
     public Partie endGame() {
-        int prop = Integer.parseInt(proposition);
-        int sol = Integer.parseInt(solution);
+        long prop = Long.parseLong(proposition);
+        long sol = Long.parseLong(solution);
         if (sol == prop) {
             partie.setEnCours(false);
             PopUpFinPartie pufp = new PopUpFinPartie(null, "Gagné", true, partie, obs);

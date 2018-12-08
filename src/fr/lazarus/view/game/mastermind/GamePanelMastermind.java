@@ -44,7 +44,7 @@ public class GamePanelMastermind  extends JPanel {
     private Balle balles[] = {bleu, brun, cyan, jaune, orange, rose, rouge, vert, vertClair, violet, noir, blanc};
 
     private JPanel jpSouth, jpGauche, jpGaucheHaut, jpGaucheBas, jpCentre, jpCentreHaut, jpCentreBas, jpDroit, jpDroitHaut, jpDroitBas, jpSolution, jpProposition;
-    private JLabel jlTitreSolution, jlTitreProposition, jlTitreIndice;
+    private JLabel jlTitreSolution, jlTitreProposition, jlTitreIndice, jlInstruction;
     private JButton okButton, cancelButton;
 
     private JPanel jpTop = new JPanel(), jpRight = new JPanel();
@@ -52,7 +52,8 @@ public class GamePanelMastermind  extends JPanel {
 
     private CenterGamePanelMastermind centerGamePanel;
 
-    private Font font = new Font("Sego UI",Font.PLAIN,24), fontTitre = new Font("Sego UI",Font.PLAIN,40);
+    private Font font = new Font("Sego UI",Font.PLAIN,24), fontTitre = new Font("Sego UI",Font.PLAIN,40),
+            font2 = new Font("Sego UI",Font.PLAIN,18);
 
     private String strProposition = "";
 
@@ -80,19 +81,29 @@ public class GamePanelMastermind  extends JPanel {
         this.setBorder(BorderFactory.createLineBorder(Color.GREEN, 15, true));
 
         jpTop.setPreferredSize(new Dimension(750, 90));
-        jpTop.setBorder(BorderFactory.createLineBorder(Color.YELLOW));
 
         if (partie.getModeDePartie() == ModeDePartie.MAST_CHAL) {
             jlModeDeJeu.setText("Mode challenger Mastermind");
             jlModeDeJeu.setForeground(Color.RED);
+            jlInstruction = new JLabel("La combinaison est de " + config.getCombiMast() + " balles");
+            jlInstruction.setPreferredSize(new Dimension(380, 30));
+            jlInstruction.setForeground(Color.gray);
+            jlInstruction.setFont(font2);
+            jlInstruction.setHorizontalAlignment(SwingConstants.CENTER);
+            jlInstruction.setVerticalAlignment(SwingConstants.CENTER);
         }
         else if (partie.getModeDePartie() == ModeDePartie.MAST_DEF) {
             jlModeDeJeu.setText("Mode défenseur Mastermind");
             jlModeDeJeu.setForeground(Color.BLUE);
         }
-
+        jlModeDeJeu.setHorizontalAlignment(SwingConstants.CENTER);
+        jlModeDeJeu.setVerticalAlignment(SwingConstants.CENTER);
+        jlModeDeJeu.setPreferredSize(new Dimension(700, 55));
         jlModeDeJeu.setFont(fontTitre);
-        jpTop.add(jlModeDeJeu);
+        jpTop.add(jlModeDeJeu, BorderLayout.CENTER);
+        if(partie.getModeDePartie() == ModeDePartie.MAST_CHAL) {
+            jpTop.add(jlInstruction, BorderLayout.SOUTH);
+        }
 
         initPanelEast();
 
