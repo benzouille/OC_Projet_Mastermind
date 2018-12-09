@@ -317,7 +317,7 @@ public class GamePanelPlusMoins extends JPanel {
             dataIsOk = false;
             jtfProposition.setText("");
         }
-        else if (!Pattern.matches("^[+-=]{" + config.getCombiPlusMoins() + "}$", indice)){
+        else if (!Pattern.matches("^[+=-]{" + config.getCombiPlusMoins() + "}$", indice)){
             JOptionPane.showMessageDialog(null, "Erreur ! \n Veuillez n'entrer que les signes \"+\", \"-\" ou \"=\".", "ERREUR", JOptionPane.ERROR_MESSAGE);
             dataIsOk = false;
             jtfProposition.setText("");
