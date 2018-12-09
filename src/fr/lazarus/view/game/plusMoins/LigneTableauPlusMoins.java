@@ -6,7 +6,7 @@ import javax.swing.JTextField;
 /**
  * Objet contenant les jLabel de chaque ligne du tableau du Panel PlusMoins
  */
-public class LigneTableau {
+public class LigneTableauPlusMoins {
 
     private JLabel jlTour;
     private JTextField jtfProps;
@@ -18,7 +18,7 @@ public class LigneTableau {
      * @param jtfProps JTextField
      * @param jlIndic JLabel
      */
-    public LigneTableau(JLabel jlTour, JTextField jtfProps, JLabel jlIndic) {
+    public LigneTableauPlusMoins(JLabel jlTour, JTextField jtfProps, JLabel jlIndic) {
         this.jlTour = jlTour;
         this.jtfProps = jtfProps;
         this.jlIndic = jlIndic;

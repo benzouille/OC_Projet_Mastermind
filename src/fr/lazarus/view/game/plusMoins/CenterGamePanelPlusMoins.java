@@ -21,7 +21,7 @@ import fr.lazarus.model.Partie;
  * @author Ben
  *
  */
-public class CenterGamePanel extends JPanel {
+public class CenterGamePanelPlusMoins extends JPanel {
 
 	/**
 	 * 
@@ -41,8 +41,8 @@ public class CenterGamePanel extends JPanel {
 
 	private String[] tour = { "#", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19","20"};
 
-	private LigneTableau ligneTableau = null;
-	private List<LigneTableau> listLigneTableau = new ArrayList<LigneTableau>();
+	private LigneTableauPlusMoins ligneTableauPlusMoins = null;
+	private List<LigneTableauPlusMoins> listLigneTableauPlusMoins = new ArrayList<LigneTableauPlusMoins>();
 
 	private Container contentPane = this;
 
@@ -51,7 +51,7 @@ public class CenterGamePanel extends JPanel {
 	 * @param config Configuration
 	 * @param partie Partie
 	 */
-	public CenterGamePanel(Configuration config, Partie partie) {
+	public CenterGamePanelPlusMoins(Configuration config, Partie partie) {
 
 		this.config = config;
 		this.partie = partie;
@@ -103,14 +103,14 @@ public class CenterGamePanel extends JPanel {
 			jlIndic.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
 			jpRight.add(jlIndic);
 
-			ligneTableau = new LigneTableau(jlTour, jtfProps, jlIndic);
-			listLigneTableau.add(ligneTableau);
+			ligneTableauPlusMoins = new LigneTableauPlusMoins(jlTour, jtfProps, jlIndic);
+			listLigneTableauPlusMoins.add(ligneTableauPlusMoins);
 		}
 
-		listLigneTableau.get(0).getJtfProps().setText("Proposition");
-		listLigneTableau.get(0).getJlIndic().setText("Indice");
+		listLigneTableauPlusMoins.get(0).getJtfProps().setText("Proposition");
+		listLigneTableauPlusMoins.get(0).getJlIndic().setText("Indice");
 		if (partie.getModeDePartie() == ModeDePartie.PLUS_DEF) {
-			listLigneTableau.get(1).getJtfProps().setText(partie.getProposition());;
+			listLigneTableauPlusMoins.get(1).getJtfProps().setText(partie.getProposition());;
 		}
 
 		setVisibleLine(0);
@@ -130,12 +130,12 @@ public class CenterGamePanel extends JPanel {
 	 * @param index int
 	 */
 	public void setVisibleLine(int index) {
-		listLigneTableau.get(index).getJlTour().setVisible(true);
-		listLigneTableau.get(index).getJlIndic().setVisible(true);
-		listLigneTableau.get(index).getJtfProps().setVisible(true);
+		listLigneTableauPlusMoins.get(index).getJlTour().setVisible(true);
+		listLigneTableauPlusMoins.get(index).getJlIndic().setVisible(true);
+		listLigneTableauPlusMoins.get(index).getJtfProps().setVisible(true);
 		if (partie.getModeDePartie() == ModeDePartie.PLUS_DEF) {
-			listLigneTableau.get(index+1).getJlTour().setVisible(true);
-			listLigneTableau.get(index+1).getJtfProps().setVisible(true);	
+			listLigneTableauPlusMoins.get(index+1).getJlTour().setVisible(true);
+			listLigneTableauPlusMoins.get(index+1).getJtfProps().setVisible(true);
 		}
 	}
 
@@ -145,12 +145,12 @@ public class CenterGamePanel extends JPanel {
 	 */
 	public void addDataLine(Partie partie) {
 		if (partie.getModeDePartie() == ModeDePartie.PLUS_CHAL) {
-			listLigneTableau.get(partie.getTour()).getJtfProps().setText(partie.getProposition());
+			listLigneTableauPlusMoins.get(partie.getTour()).getJtfProps().setText(partie.getProposition());
 		}
 		else if (partie.getModeDePartie() == ModeDePartie.PLUS_DEF) {
-			listLigneTableau.get(partie.getTour()+1).getJtfProps().setText(partie.getProposition());
+			listLigneTableauPlusMoins.get(partie.getTour()+1).getJtfProps().setText(partie.getProposition());
 		}
-		listLigneTableau.get(partie.getTour()).getJlIndic().setText(partie.getIndice());
+		listLigneTableauPlusMoins.get(partie.getTour()).getJlIndic().setText(partie.getIndice());
 		setVisibleLine(partie.getTour());
 		this.repaint();
 	}

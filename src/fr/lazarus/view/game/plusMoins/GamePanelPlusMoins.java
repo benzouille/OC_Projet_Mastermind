@@ -45,7 +45,7 @@ public class GamePanelPlusMoins extends JPanel {
     private JLabel jlModeDeJeu = new JLabel();
 
     //-- panel Center
-    private CenterGamePanel centerGamePanel;
+    private CenterGamePanelPlusMoins centerGamePanel;
 
     private Font font = new Font("Sego UI",Font.PLAIN,24), fontTitre = new Font("Sego UI",Font.PLAIN,40),
             font2 = new Font("Sego UI",Font.PLAIN,18);
@@ -99,7 +99,7 @@ public class GamePanelPlusMoins extends JPanel {
         }
         contentPane.add(jpTop, BorderLayout.NORTH);
 
-        centerGamePanel = new CenterGamePanel(config, partie);
+        centerGamePanel = new CenterGamePanelPlusMoins(config, partie);
         centerGamePanel.add(jpRight, BorderLayout.EAST);
         contentPane.add(centerGamePanel, BorderLayout.CENTER);
 
