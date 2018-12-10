@@ -5,6 +5,7 @@ import fr.lazarus.model.mastermind.MasterMastermind;
 import fr.lazarus.model.plusMoins.JoueurPlus;
 import fr.lazarus.model.plusMoins.MasterPlus;
 import fr.lazarus.observer.Observateur;
+import fr.lazarus.view.game.plusMoins.GamePanelPlusMoins;
 
 /**
  * Classe instanciant les parties en fonction des modes de jeu
