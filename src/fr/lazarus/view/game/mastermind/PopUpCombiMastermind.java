@@ -51,7 +51,7 @@ public class PopUpCombiMastermind extends JDialog implements Observable {
     private JLabel jlCombi;
     private Configuration config;
     private Partie partie;
-    private boolean isOkData;
+    private boolean isOkData, annuler = false;
     private int nbreChiffre;
     private String solution, strProposition;
 
@@ -107,6 +107,9 @@ public class PopUpCombiMastermind extends JDialog implements Observable {
         JButton randomButton = new JButton("Aléatoire");
         randomButton.addActionListener(new RandomListener());
 
+        JButton eraseButton = new JButton("Effacer");
+        eraseButton.addActionListener(new EraseListener());
+
         panCombi = new JPanel();
         panCombi.setBackground(Color.white);
         panCombi.setPreferredSize(new Dimension(790, 80));
@@ -114,6 +117,7 @@ public class PopUpCombiMastermind extends JDialog implements Observable {
         panCombi.add(jlCombi);
         panCombi.add(jpCombi);
         panCombi.add(randomButton);
+        panCombi.add(eraseButton);
 
         //-- Ajout de tout les composants au content
         content = new JPanel();
@@ -129,9 +133,8 @@ public class PopUpCombiMastermind extends JDialog implements Observable {
         JButton cancelBouton = new JButton("Annuler");
         cancelBouton.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent arg0) {
-                strProposition ="";
-                jpCombi.removeAll();
-                jpCombi.repaint();
+                setVisible(false);
+                annuler = true;
             }
         });
 
@@ -162,6 +165,12 @@ public class PopUpCombiMastermind extends JDialog implements Observable {
         }
     }
 
+    //GETTER SETTER
+
+    public boolean isAnnuler() { return annuler; }
+
+    //NESTED CLASS
+
     /**
      * NestedClass du bouton "ok"
      */
@@ -188,6 +197,17 @@ public class PopUpCombiMastermind extends JDialog implements Observable {
             jpCombi.repaint();
             strProposition = partie.random(nbreChiffre, config.getCouleurMast());
             stringToImage(strProposition, jpCombi);
+        }
+    }
+
+    /**
+     * NestedClass du bouton "effacer", permet d'effacer combinaison
+     */
+    class EraseListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            strProposition ="";
+            jpCombi.removeAll();
+            jpCombi.repaint();
         }
     }
 
