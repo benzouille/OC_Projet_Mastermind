@@ -46,6 +46,7 @@ public class PopUpCombiPlus extends JDialog implements Observable {
 	private boolean isOkData;
 	private int nbreChiffre;
 	private String solution;
+	private boolean annuler = false;
 
 	/**
 	 * Constructeur utilisant les bean Partie et Configuration
@@ -73,7 +74,8 @@ public class PopUpCombiPlus extends JDialog implements Observable {
 	/**
 	 * Intitiation du contenu du Panel
 	 */
-    private void initComponent() {
+    @SuppressWarnings("Duplicates")
+	private void initComponent() {
 
 		//Choix de la combinaison
 		jlCombi = new JLabel("Choisissez votre code à " + nbreChiffre + " chiffres :");
@@ -106,6 +108,7 @@ public class PopUpCombiPlus extends JDialog implements Observable {
 		cancelBouton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
 				setVisible(false);
+				annuler = true;
 			}      
 		});
 
@@ -141,7 +144,13 @@ public class PopUpCombiPlus extends JDialog implements Observable {
 		}
 	}
 
-    /**
+	//GETTER SETTER
+
+	public boolean isAnnuler() { return annuler; }
+
+	//NESTED CLASS
+
+	/**
      * NestedClass du bouton "ok"
      */
 	class RunListener implements ActionListener {
@@ -173,10 +182,10 @@ public class PopUpCombiPlus extends JDialog implements Observable {
 	}
 
 	public void updateObservateur() {
-		for(Observateur obs : listObservateur) {
-			obs.update(partie);
+			for (Observateur obs : listObservateur) {
+				obs.update(partie);
+			}
 		}
-	}
 
 	public void delObservateur() {}
 }
